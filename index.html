@@ -8,12 +8,10 @@
     /* Styles généraux */
     body {
       margin: 0;
-      padding: 0;
       overflow: hidden;
       font-family: Arial, sans-serif;
       transition: background 0.5s ease-in-out;
     }
-    /* Fond dynamique */
     .background {
       position: fixed;
       width: 100vw;
@@ -21,7 +19,6 @@
       background: linear-gradient(120deg, #001f3f, #0074d9);
       transition: background 1s ease-in-out;
     }
-    /* Mode jour */
     .day .background {
       background: linear-gradient(120deg, #ffcc00, #ff6600);
     }
@@ -35,7 +32,6 @@
       border-radius: 8px;
       z-index: 10;
       color: white;
-      font-size: 14px;
     }
     .day #controls {
       background: rgba(255, 255, 255, 0.8);
@@ -46,12 +42,133 @@
       margin-bottom: 8px;
     }
     #controls input[type="range"] {
-      width: 200px;
+      width: 180px;
     }
     #controls button {
       margin-top: 10px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       border: none;
       background: lime;
       color: #111;
-     
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <div id="controls">
+    <label>Angle : <span id="angleValue">20</span>
+      <input type="range" id="angle" min="10" max="50" value="20">
+    </label>
+    <label>Longueur : <span id="lengthValue">120</span>
+      <input type="range" id="branchLength" min="80" max="200" value="120">
+    </label>
+    <label>Vent : <span id="windValue">10</span>
+      <input type="range" id="wind" min="0" max="30" value="10">
+    </label>
+    <button id="toggleAnimation">Pause</button>
+    <button id="toggleTheme">Mode Jour/Nuit</button>
+    <button id="downloadImage">Télécharger</button>
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const body = document.body;
+
+    const angleSlider = document.getElementById("angle");
+    const branchLengthSlider = document.getElementById("branchLength");
+    const windSlider = document.getElementById("wind");
+    const toggleThemeButton = document.getElementById("toggleTheme");
+    const downloadImageButton = document.getElementById("downloadImage");
+
+    let animationPaused = false;
+    let time = 0;
+    let dragging = false;
+    let offsetX = 0, offsetY = 0;
+    let startX, startY;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function drawTree(length) {
+      if (length < 10) return;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, -length);
+      ctx.stroke();
+      ctx.translate(0, -length);
+
+      let baseAngle = Number(angleSlider.value) * Math.PI / 180;
+      let windAmplitude = Number(windSlider.value) * Math.PI / 180;
+      let windEffect = windAmplitude * Math.sin(time);
+
+      ctx.save();
+      ctx.rotate(baseAngle + windEffect);
+      drawTree(length * 0.75);
+      ctx.restore();
+
+      ctx.save();
+      ctx.rotate(-baseAngle + windEffect);
+      drawTree(length * 0.75);
+      ctx.restore();
+    }
+
+    function animate() {
+      if (!animationPaused) time += 0.02;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width / 2 + offsetX, canvas.height + offsetY);
+      ctx.strokeStyle = "lime";
+      drawTree(Number(branchLengthSlider.value));
+      ctx.restore();
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    document.getElementById("toggleAnimation").addEventListener("click", () => {
+      animationPaused = !animationPaused;
+    });
+
+    toggleThemeButton.addEventListener("click", () => {
+      body.classList.toggle("day");
+    });
+
+    downloadImageButton.addEventListener("click", () => {
+      let link = document.createElement("a");
+      link.download = "fractal_tree.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+
+    canvas.addEventListener("mousedown", (e) => {
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      if (dragging) {
+        offsetX += e.clientX - startX;
+        offsetY += e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY;
+      }
+    });
+
+    canvas.addEventListener("mouseup", () => dragging = false);
+    canvas.addEventListener("mouseleave", () => dragging = false);
+  </script>
+</body>
+</html>
