@@ -2,56 +2,52 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arbre Fractal Interactif</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arbre Fractal Interactif Avancé</title>
   <style>
-    /* Styles généraux */
+    /* Réglages de base */
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
+      padding: 0;
+      background: #111;
       overflow: hidden;
-      font-family: Arial, sans-serif;
-      transition: background 0.5s ease-in-out;
-    }
-    .background {
-      position: fixed;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(120deg, #001f3f, #0074d9);
-      transition: background 1s ease-in-out;
-    }
-    .day .background {
-      background: linear-gradient(120deg, #ffcc00, #ff6600);
+      font-family: 'Arial', sans-serif;
+      color: #eee;
     }
     /* Panneau de contrôles */
     #controls {
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 12px;
-      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 15px;
+      border-radius: 10px;
       z-index: 10;
-      color: white;
-    }
-    .day #controls {
-      background: rgba(255, 255, 255, 0.8);
-      color: black;
+      font-size: 14px;
     }
     #controls label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    #controls input[type="range"] {
-      width: 180px;
+    #controls input[type="range"],
+    #controls input[type="color"] {
+      width: 220px;
+      margin-top: 4px;
     }
     #controls button {
       margin-top: 10px;
-      padding: 8px 12px;
+      padding: 6px 12px;
       border: none;
       background: lime;
       color: #111;
       cursor: pointer;
       border-radius: 4px;
+      font-size: 14px;
+      display: block;
+      width: 100%;
     }
     canvas {
       display: block;
@@ -59,42 +55,89 @@
   </style>
 </head>
 <body>
-  <div class="background"></div>
-
+  <!-- Panneau de contrôles interactifs -->
   <div id="controls">
-    <label>Angle : <span id="angleValue">20</span>
+    <label>
+      Angle (°) : <span id="angleValue">20</span>
       <input type="range" id="angle" min="10" max="50" value="20">
     </label>
-    <label>Longueur : <span id="lengthValue">120</span>
+    <label>
+      Longueur initiale : <span id="lengthValue">120</span>
       <input type="range" id="branchLength" min="80" max="200" value="120">
     </label>
-    <label>Vent : <span id="windValue">10</span>
+    <label>
+      Facteur de réduction : <span id="shrinkValue">0.75</span>
+      <input type="range" id="shrinkFactor" min="0.5" max="0.9" step="0.01" value="0.75">
+    </label>
+    <label>
+      Amplitude du vent (°) : <span id="windValue">10</span>
       <input type="range" id="wind" min="0" max="30" value="10">
     </label>
+    <label>
+      Vitesse du vent : <span id="windSpeedValue">0.02</span>
+      <input type="range" id="windSpeed" min="0.005" max="0.1" step="0.005" value="0.02">
+    </label>
+    <label>
+      Épaisseur initiale : <span id="thicknessValue">10</span>
+      <input type="range" id="thickness" min="5" max="20" value="10">
+    </label>
+    <label>
+      Seuil de branche (taille minimale) : <span id="minLengthValue">10</span>
+      <input type="range" id="minBranchLength" min="5" max="20" value="10">
+    </label>
+    <label>
+      Couleur des branches :
+      <input type="color" id="branchColor" value="#00FF00">
+    </label>
+    <label>
+      Couleur des feuilles :
+      <input type="color" id="leafColor" value="#00FF00">
+    </label>
     <button id="toggleAnimation">Pause</button>
-    <button id="toggleTheme">Mode Jour/Nuit</button>
-    <button id="downloadImage">Télécharger</button>
+    <button id="resetSettings">Réinitialiser</button>
+    <button id="downloadImage">Télécharger l'image</button>
   </div>
 
+  <!-- Canvas pour le dessin -->
   <canvas id="canvas"></canvas>
 
   <script>
+    // Récupération des éléments du DOM
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const body = document.body;
 
+    // Contrôles par curseur
     const angleSlider = document.getElementById("angle");
     const branchLengthSlider = document.getElementById("branchLength");
+    const shrinkFactorSlider = document.getElementById("shrinkFactor");
     const windSlider = document.getElementById("wind");
-    const toggleThemeButton = document.getElementById("toggleTheme");
+    const windSpeedSlider = document.getElementById("windSpeed");
+    const thicknessSlider = document.getElementById("thickness");
+    const minBranchLengthSlider = document.getElementById("minBranchLength");
+
+    // Sélecteurs de couleur
+    const branchColorInput = document.getElementById("branchColor");
+    const leafColorInput = document.getElementById("leafColor");
+
+    // Éléments d'affichage des valeurs
+    const angleValue = document.getElementById("angleValue");
+    const lengthValue = document.getElementById("lengthValue");
+    const shrinkValue = document.getElementById("shrinkValue");
+    const windValue = document.getElementById("windValue");
+    const windSpeedValue = document.getElementById("windSpeedValue");
+    const thicknessValue = document.getElementById("thicknessValue");
+    const minLengthValue = document.getElementById("minLengthValue");
+
+    // Boutons
+    const toggleAnimationButton = document.getElementById("toggleAnimation");
+    const resetSettingsButton = document.getElementById("resetSettings");
     const downloadImageButton = document.getElementById("downloadImage");
 
+    // Variables d'animation
     let animationPaused = false;
-    let time = 0;
-    let dragging = false;
-    let offsetX = 0, offsetY = 0;
-    let startX, startY;
+    let time = 0; // variable de temps pour l'effet vent
 
+    // Ajustement dynamique du canvas à la taille de la fenêtre
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -102,73 +145,102 @@
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
-    function drawTree(length) {
-      if (length < 10) return;
+    // Fonction récursive pour dessiner l'arbre fractal
+    function drawTree(length, branchWidth) {
+      const minBranchLength = Number(minBranchLengthSlider.value);
+      if (length < minBranchLength) {
+        // Dessin d'une feuille
+        ctx.fillStyle = leafColorInput.value;
+        ctx.beginPath();
+        ctx.arc(0, 0, 4, 0, Math.PI * 2);
+        ctx.fill();
+        return;
+      }
+
+      // Dessin de la branche
+      ctx.lineWidth = branchWidth;
+      ctx.strokeStyle = branchColorInput.value;
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(0, -length);
       ctx.stroke();
+
+      // Se positionner à l'extrémité de la branche
       ctx.translate(0, -length);
 
-      let baseAngle = Number(angleSlider.value) * Math.PI / 180;
-      let windAmplitude = Number(windSlider.value) * Math.PI / 180;
-      let windEffect = windAmplitude * Math.sin(time);
+      const baseAngle = Number(angleSlider.value) * Math.PI / 180;
+      const shrinkFactor = Number(shrinkFactorSlider.value);
+      const windAmplitude = Number(windSlider.value) * Math.PI / 180;
+      // L'effet du vent varie en fonction du temps et de la vitesse définie
+      const windEffect = windAmplitude * Math.sin(time);
 
+      // Branche droite
       ctx.save();
       ctx.rotate(baseAngle + windEffect);
-      drawTree(length * 0.75);
+      drawTree(length * shrinkFactor, branchWidth * 0.7);
       ctx.restore();
 
+      // Branche gauche
       ctx.save();
       ctx.rotate(-baseAngle + windEffect);
-      drawTree(length * 0.75);
+      drawTree(length * shrinkFactor, branchWidth * 0.7);
       ctx.restore();
     }
 
+    // Boucle d'animation
     function animate() {
-      if (!animationPaused) time += 0.02;
+      if (!animationPaused) {
+        time += Number(windSpeedSlider.value);
+      }
+
+      // Mise à jour des valeurs affichées dans le panneau de contrôles
+      angleValue.textContent = angleSlider.value;
+      lengthValue.textContent = branchLengthSlider.value;
+      shrinkValue.textContent = shrinkFactorSlider.value;
+      windValue.textContent = windSlider.value;
+      windSpeedValue.textContent = windSpeedSlider.value;
+      thicknessValue.textContent = thicknessSlider.value;
+      minLengthValue.textContent = minBranchLengthSlider.value;
+
+      // Effacer le canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Positionner le point de départ au centre en bas du canvas
       ctx.save();
-      ctx.translate(canvas.width / 2 + offsetX, canvas.height + offsetY);
-      ctx.strokeStyle = "lime";
-      drawTree(Number(branchLengthSlider.value));
+      ctx.translate(canvas.width / 2, canvas.height);
+      drawTree(Number(branchLengthSlider.value), Number(thicknessSlider.value));
       ctx.restore();
+
       requestAnimationFrame(animate);
     }
     animate();
 
-    document.getElementById("toggleAnimation").addEventListener("click", () => {
+    // Bouton pour mettre en pause/reprendre l'animation
+    toggleAnimationButton.addEventListener("click", () => {
       animationPaused = !animationPaused;
+      toggleAnimationButton.textContent = animationPaused ? "Reprendre" : "Pause";
     });
 
-    toggleThemeButton.addEventListener("click", () => {
-      body.classList.toggle("day");
+    // Bouton pour réinitialiser les réglages aux valeurs par défaut
+    resetSettingsButton.addEventListener("click", () => {
+      angleSlider.value = 20;
+      branchLengthSlider.value = 120;
+      shrinkFactorSlider.value = 0.75;
+      windSlider.value = 10;
+      windSpeedSlider.value = 0.02;
+      thicknessSlider.value = 10;
+      minBranchLengthSlider.value = 10;
+      branchColorInput.value = "#00FF00";
+      leafColorInput.value = "#00FF00";
     });
 
+    // Bouton pour télécharger l'image actuelle du canvas
     downloadImageButton.addEventListener("click", () => {
-      let link = document.createElement("a");
-      link.download = "fractal_tree.png";
+      const link = document.createElement("a");
+      link.download = "arbre_fractal.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
-
-    canvas.addEventListener("mousedown", (e) => {
-      dragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-    });
-
-    canvas.addEventListener("mousemove", (e) => {
-      if (dragging) {
-        offsetX += e.clientX - startX;
-        offsetY += e.clientY - startY;
-        startX = e.clientX;
-        startY = e.clientY;
-      }
-    });
-
-    canvas.addEventListener("mouseup", () => dragging = false);
-    canvas.addEventListener("mouseleave", () => dragging = false);
   </script>
 </body>
 </html>
