@@ -2,19 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <!-- Pour un affichage optimal sur mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arbre Fractal Interactif Avancé</title>
+  <title>Arbre Fractal Interactif</title>
   <style>
-    /* Styles de base */
+    /* Styles généraux */
     body {
       margin: 0;
       padding: 0;
-      background-color: #111;
       overflow: hidden;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      transition: background 0.5s ease-in-out;
     }
-    /* Style du panneau de contrôles */
+    /* Fond dynamique */
+    .background {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(120deg, #001f3f, #0074d9);
+      transition: background 1s ease-in-out;
+    }
+    /* Mode jour */
+    .day .background {
+      background: linear-gradient(120deg, #ffcc00, #ff6600);
+    }
+    /* Panneau de contrôles */
     #controls {
       position: absolute;
       top: 10px;
@@ -23,174 +34,24 @@
       padding: 12px;
       border-radius: 8px;
       z-index: 10;
-      color: #eee;
+      color: white;
       font-size: 14px;
+    }
+    .day #controls {
+      background: rgba(255, 255, 255, 0.8);
+      color: black;
     }
     #controls label {
       display: block;
       margin-bottom: 8px;
     }
     #controls input[type="range"] {
-      width: 220px;
+      width: 200px;
     }
     #controls button {
       margin-top: 10px;
-      padding: 6px 12px;
+      padding: 8px 14px;
       border: none;
       background: lime;
       color: #111;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <!-- Panneau de contrôles interactifs -->
-  <div id="controls">
-    <label>
-      Angle (°) : <span id="angleValue">20</span>
-      <input type="range" id="angle" min="10" max="50" value="20">
-    </label>
-    <label>
-      Longueur initiale : <span id="lengthValue">120</span>
-      <input type="range" id="branchLength" min="80" max="200" value="120">
-    </label>
-    <label>
-      Facteur de réduction : <span id="shrinkValue">0.75</span>
-      <input type="range" id="shrinkFactor" min="0.5" max="0.9" step="0.01" value="0.75">
-    </label>
-    <label>
-      Amplitude du vent : <span id="windValue">10</span>
-      <input type="range" id="wind" min="0" max="30" value="10">
-    </label>
-    <label>
-      Épaisseur initiale : <span id="thicknessValue">10</span>
-      <input type="range" id="thickness" min="5" max="20" value="10">
-    </label>
-    <button id="toggleAnimation">Pause</button>
-    <button id="downloadImage">Télécharger l'image</button>
-  </div>
-
-  <!-- Canvas pour le dessin -->
-  <canvas id="canvas"></canvas>
-
-  <script>
-    // Récupération des éléments du DOM
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-
-    const angleSlider = document.getElementById("angle");
-    const branchLengthSlider = document.getElementById("branchLength");
-    const shrinkFactorSlider = document.getElementById("shrinkFactor");
-    const windSlider = document.getElementById("wind");
-    const thicknessSlider = document.getElementById("thickness");
-
-    const angleValue = document.getElementById("angleValue");
-    const lengthValue = document.getElementById("lengthValue");
-    const shrinkValue = document.getElementById("shrinkValue");
-    const windValue = document.getElementById("windValue");
-    const thicknessValue = document.getElementById("thicknessValue");
-
-    const toggleAnimationButton = document.getElementById("toggleAnimation");
-    const downloadImageButton = document.getElementById("downloadImage");
-
-    // Variables d'animation
-    let animationPaused = false;
-    let time = 0; // variable de temps pour l'effet vent
-
-    // Ajustement dynamique du canvas à la taille de la fenêtre
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    // Fonction récursive pour dessiner l'arbre fractal
-    function drawTree(length, branchWidth) {
-      if (length < 10) {
-        // Dessin d'une feuille : cercle vert semi-transparent
-        ctx.fillStyle = "rgba(0, 255, 0, 0.7)";
-        ctx.beginPath();
-        ctx.arc(0, 0, 4, 0, Math.PI * 2);
-        ctx.fill();
-        return;
-      }
-
-      // Dessin de la branche
-      ctx.lineWidth = branchWidth;
-      ctx.strokeStyle = "lime";
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, -length);
-      ctx.stroke();
-
-      // Se positionner à l'extrémité de la branche
-      ctx.translate(0, -length);
-
-      // Calcul des paramètres de rotation
-      const baseAngle = Number(angleSlider.value) * Math.PI / 180;
-      const shrinkFactor = Number(shrinkFactorSlider.value);
-      const windAmplitude = Number(windSlider.value) * Math.PI / 180;
-      // L'effet du vent varie en fonction du temps
-      const windEffect = windAmplitude * Math.sin(time);
-
-      // Branche droite
-      ctx.save();
-      ctx.rotate(baseAngle + windEffect);
-      drawTree(length * shrinkFactor, branchWidth * 0.7);
-      ctx.restore();
-
-      // Branche gauche
-      ctx.save();
-      ctx.rotate(-baseAngle + windEffect);
-      drawTree(length * shrinkFactor, branchWidth * 0.7);
-      ctx.restore();
-    }
-
-    // Boucle d'animation
-    function animate() {
-      if (!animationPaused) {
-        time += 0.02; // Vitesse d'oscillation pour l'effet vent
-      }
-
-      // Mise à jour des valeurs affichées dans le panneau de contrôles
-      angleValue.textContent = angleSlider.value;
-      lengthValue.textContent = branchLengthSlider.value;
-      shrinkValue.textContent = shrinkFactorSlider.value;
-      windValue.textContent = windSlider.value;
-      thicknessValue.textContent = thicknessSlider.value;
-
-      // Effacer le canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Positionner le point de départ au centre en bas du canvas
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height);
-      drawTree(Number(branchLengthSlider.value), Number(thicknessSlider.value));
-      ctx.restore();
-
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // Bouton pour mettre en pause/reprendre l'animation
-    toggleAnimationButton.addEventListener("click", () => {
-      animationPaused = !animationPaused;
-      toggleAnimationButton.textContent = animationPaused ? "Reprendre" : "Pause";
-    });
-
-    // Bouton pour télécharger l'image actuelle du canvas
-    downloadImageButton.addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = "arbre_fractal.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
-  </script>
-</body>
-</html>
+     
