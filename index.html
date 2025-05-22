@@ -2,245 +2,65 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arbre Fractal Interactif Avancé</title>
-  <style>
-    /* Réglages de base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background: #111;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      color: #eee;
-    }
-    /* Panneau de contrôles */
-    #controls {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.85);
-      padding: 15px;
-      border-radius: 10px;
-      z-index: 10;
-      font-size: 14px;
-    }
-    #controls label {
-      display: block;
-      margin-bottom: 10px;
-    }
-    #controls input[type="range"],
-    #controls input[type="color"] {
-      width: 220px;
-      margin-top: 4px;
-    }
-    #controls button {
-      margin-top: 10px;
-      padding: 6px 12px;
-      border: none;
-      background: lime;
-      color: #111;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
-      display: block;
-      width: 100%;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
+  <title>Réaction-Diffusion - Nature & Fractales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Panneau de contrôles interactifs -->
-  <div id="controls">
-    <label>
-      Angle (°) : <span id="angleValue">20</span>
-      <input type="range" id="angle" min="10" max="50" value="20">
-    </label>
-    <label>
-      Longueur initiale : <span id="lengthValue">120</span>
-      <input type="range" id="branchLength" min="80" max="200" value="120">
-    </label>
-    <label>
-      Facteur de réduction : <span id="shrinkValue">0.75</span>
-      <input type="range" id="shrinkFactor" min="0.5" max="0.9" step="0.01" value="0.75">
-    </label>
-    <label>
-      Amplitude du vent (°) : <span id="windValue">10</span>
-      <input type="range" id="wind" min="0" max="30" value="10">
-    </label>
-    <label>
-      Vitesse du vent : <span id="windSpeedValue">0.02</span>
-      <input type="range" id="windSpeed" min="0.005" max="0.1" step="0.005" value="0.02">
-    </label>
-    <label>
-      Épaisseur initiale : <span id="thicknessValue">10</span>
-      <input type="range" id="thickness" min="5" max="20" value="10">
-    </label>
-    <label>
-      Seuil de branche (taille minimale) : <span id="minLengthValue">10</span>
-      <input type="range" id="minBranchLength" min="5" max="20" value="10">
-    </label>
-    <label>
-      Couleur des branches :
-      <input type="color" id="branchColor" value="#00FF00">
-    </label>
-    <label>
-      Couleur des feuilles :
-      <input type="color" id="leafColor" value="#00FF00">
-    </label>
-    <button id="toggleAnimation">Pause</button>
-    <button id="resetSettings">Réinitialiser</button>
-    <button id="downloadImage">Télécharger l'image</button>
-  </div>
-
-  <!-- Canvas pour le dessin -->
+  <h1>Réaction-Diffusion<br>
+    <span class="subtitle">Nature & Fractales</span>
+  </h1>
   <canvas id="canvas"></canvas>
 
-  <script>
-    // Récupération des éléments du DOM
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+  <section class="controls">
+    <label>Feed <input type="range" min="0.0" max="0.1" step="0.0005" id="feed"><input type="number" min="0.0" max="0.1" step="0.0005" id="feednum"></label>
+    <label>Kill <input type="range" min="0.0" max="0.1" step="0.0005" id="kill"><input type="number" min="0.0" max="0.1" step="0.0005" id="killnum"></label>
+    <label>diffU <input type="range" min="0.02" max="0.4" step="0.002" id="diffU"><input type="number" min="0.02" max="0.4" step="0.002" id="diffUnum"></label>
+    <label>diffV <input type="range" min="0.01" max="0.15" step="0.001" id="diffV"><input type="number" min="0.01" max="0.15" step="0.001" id="diffVnum"></label>
+    <label>Vitesse <input type="range" min="1" max="15" step="1" id="speed"></label>
+    <label>Zoom <input type="range" min="80" max="220" value="160" id="zoom"></label>
+    <button id="reset">Réinitialiser</button>
+    <button id="randomize">Seed aléatoire</button>
+    <button id="saveimg">Enregistrer l’image</button>
+  </section>
 
-    // Contrôles par curseur
-    const angleSlider = document.getElementById("angle");
-    const branchLengthSlider = document.getElementById("branchLength");
-    const shrinkFactorSlider = document.getElementById("shrinkFactor");
-    const windSlider = document.getElementById("wind");
-    const windSpeedSlider = document.getElementById("windSpeed");
-    const thicknessSlider = document.getElementById("thickness");
-    const minBranchLengthSlider = document.getElementById("minBranchLength");
+  <section class="extras">
+    <label>Palette&nbsp;
+      <select id="palette">
+        <option value="bw">Noir & blanc</option>
+        <option value="sable">Sable</option>
+        <option value="foret">Forêt</option>
+        <option value="corail">Corail</option>
+        <option value="zebra">Zèbre</option>
+        <option value="marron">Marron</option>
+        <option value="feuille">Feuille</option>
+      </select>
+    </label>
+    <label>Rendu
+      <select id="renderMode">
+        <option value="normal">Normal</option>
+        <option value="contours">Contours</option>
+        <option value="heat">Chaleur</option>
+      </select>
+    </label>
+    <label>Contraste <input type="range" min="0.7" max="3" step="0.01" value="1" id="contrast"></label>
+    <label>Gain <input type="range" min="0.5" max="2.2" step="0.01" value="1" id="gain"></label>
+    <label>Offset <input type="range" min="-0.2" max="0.2" step="0.001" value="0" id="offset"></label>
+  </section>
 
-    // Sélecteurs de couleur
-    const branchColorInput = document.getElementById("branchColor");
-    const leafColorInput = document.getElementById("leafColor");
+  <section class="fractale">
+    <label><input type="checkbox" id="fractaleChk"> Mode fractale</label>
+    <label>Type
+      <select id="fractaleType">
+        <option value="perlin">Perlin</option>
+        <option value="mandelbrot">Mandelbrot</option>
+      </select>
+    </label>
+  </section>
 
-    // Éléments d'affichage des valeurs
-    const angleValue = document.getElementById("angleValue");
-    const lengthValue = document.getElementById("lengthValue");
-    const shrinkValue = document.getElementById("shrinkValue");
-    const windValue = document.getElementById("windValue");
-    const windSpeedValue = document.getElementById("windSpeedValue");
-    const thicknessValue = document.getElementById("thicknessValue");
-    const minLengthValue = document.getElementById("minLengthValue");
-
-    // Boutons
-    const toggleAnimationButton = document.getElementById("toggleAnimation");
-    const resetSettingsButton = document.getElementById("resetSettings");
-    const downloadImageButton = document.getElementById("downloadImage");
-
-    // Variables d'animation
-    let animationPaused = false;
-    let time = 0; // variable de temps pour l'effet vent
-
-    // Ajustement dynamique du canvas à la taille de la fenêtre
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    // Fonction récursive pour dessiner l'arbre fractal
-    function drawTree(length, branchWidth) {
-      const minBranchLength = Number(minBranchLengthSlider.value);
-      if (length < minBranchLength) {
-        // Dessin d'une feuille
-        ctx.fillStyle = leafColorInput.value;
-        ctx.beginPath();
-        ctx.arc(0, 0, 4, 0, Math.PI * 2);
-        ctx.fill();
-        return;
-      }
-
-      // Dessin de la branche
-      ctx.lineWidth = branchWidth;
-      ctx.strokeStyle = branchColorInput.value;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, -length);
-      ctx.stroke();
-
-      // Se positionner à l'extrémité de la branche
-      ctx.translate(0, -length);
-
-      const baseAngle = Number(angleSlider.value) * Math.PI / 180;
-      const shrinkFactor = Number(shrinkFactorSlider.value);
-      const windAmplitude = Number(windSlider.value) * Math.PI / 180;
-      // L'effet du vent varie en fonction du temps et de la vitesse définie
-      const windEffect = windAmplitude * Math.sin(time);
-
-      // Branche droite
-      ctx.save();
-      ctx.rotate(baseAngle + windEffect);
-      drawTree(length * shrinkFactor, branchWidth * 0.7);
-      ctx.restore();
-
-      // Branche gauche
-      ctx.save();
-      ctx.rotate(-baseAngle + windEffect);
-      drawTree(length * shrinkFactor, branchWidth * 0.7);
-      ctx.restore();
-    }
-
-    // Boucle d'animation
-    function animate() {
-      if (!animationPaused) {
-        time += Number(windSpeedSlider.value);
-      }
-
-      // Mise à jour des valeurs affichées dans le panneau de contrôles
-      angleValue.textContent = angleSlider.value;
-      lengthValue.textContent = branchLengthSlider.value;
-      shrinkValue.textContent = shrinkFactorSlider.value;
-      windValue.textContent = windSlider.value;
-      windSpeedValue.textContent = windSpeedSlider.value;
-      thicknessValue.textContent = thicknessSlider.value;
-      minLengthValue.textContent = minBranchLengthSlider.value;
-
-      // Effacer le canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Positionner le point de départ au centre en bas du canvas
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height);
-      drawTree(Number(branchLengthSlider.value), Number(thicknessSlider.value));
-      ctx.restore();
-
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // Bouton pour mettre en pause/reprendre l'animation
-    toggleAnimationButton.addEventListener("click", () => {
-      animationPaused = !animationPaused;
-      toggleAnimationButton.textContent = animationPaused ? "Reprendre" : "Pause";
-    });
-
-    // Bouton pour réinitialiser les réglages aux valeurs par défaut
-    resetSettingsButton.addEventListener("click", () => {
-      angleSlider.value = 20;
-      branchLengthSlider.value = 120;
-      shrinkFactorSlider.value = 0.75;
-      windSlider.value = 10;
-      windSpeedSlider.value = 0.02;
-      thicknessSlider.value = 10;
-      minBranchLengthSlider.value = 10;
-      branchColorInput.value = "#00FF00";
-      leafColorInput.value = "#00FF00";
-    });
-
-    // Bouton pour télécharger l'image actuelle du canvas
-    downloadImageButton.addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = "arbre_fractal.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
-  </script>
+  <footer>
+    <span>by <a href="#">Toi !</a> — Open source & bidouillable sur GitHub</span>
+  </footer>
+  <script src="app.js"></script>
 </body>
 </html>
