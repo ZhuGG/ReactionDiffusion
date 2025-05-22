@@ -1,96 +1,86 @@
-// --- PARAMÈTRES & DONNÉES ---
+// Réaction-diffusion & fractale - version avancée avec palettes naturelles et interactions
+
+/////////////////////////////
+// PARAMÈTRES GLOBAUX
+/////////////////////////////
+
 const CANVAS_W = 480, CANVAS_H = 315, N = CANVAS_W * CANVAS_H;
-let U, V, U2, V2, running = true, animationId = null, fractaleMode = false, fractaleType = "perlin";
-
+let U, V, U2, V2;
 let params = {
-  feed: 0.037, kill: 0.06, diffU: 0.16, diffV: 0.08, speed: 4, zoom: 160,
-  contrast: 1, gain: 1, offset: 0,
-  palette: "bw", renderMode: "normal"
+  feed: 0.037,
+  kill: 0.06,
+  diffU: 0.16,
+  diffV: 0.08,
+  speed: 5,
+  zoom: 160
 };
+let running = true, animationId = null;
+let fractaleMode = false, fractaleType = 'perlin';
+let invert = false;
+let colorPalette = "nb";
 
-const PRESETS = {
-  tigre:  { feed:0.034, kill:0.056, diffU:0.17, diffV:0.09 },
-  léopard:{ feed:0.037, kill:0.063, diffU:0.15, diffV:0.068 },
-  corail: { feed:0.055, kill:0.062, diffU:0.16, diffV:0.064 },
-  girafe: { feed:0.03,  kill:0.058, diffU:0.21, diffV:0.1 },
-  ondes:  { feed:0.025, kill:0.055, diffU:0.19, diffV:0.05 },
-  zèbre:  { feed:0.025, kill:0.061, diffU:0.18, diffV:0.07 },
-  aléatoire: null
-};
+/////////////////////////////
+// PALETTES DE COULEURS
+/////////////////////////////
 
-// -- Palettes naturelles (de 2 à 4 couleurs selon la sélection) --
 const PALETTES = {
-  bw:       [[255,255,255],[30,30,30]],
-  sable:    [[232,210,151],[193,164,110],[118,92,53],[62,51,34]],
-  foret:    [[225,244,214],[98,133,84],[38,59,32],[19,31,20]],
-  corail:   [[252,228,211],[220,79,69],[225,180,133],[77,57,43]],
-  zebra:    [[255,255,255],[35,35,35],[230,220,172],[119,101,55]],
-  marron:   [[237,214,187],[157,111,69],[69,49,35],[40,27,17]],
-  feuille:  [[231,246,206],[140,210,126],[56,112,51],[33,58,28]]
+  nb:   v => [v*255,v*255,v*255],
+  tigre: v => [Math.floor(255-80*v),Math.floor(150-50*v),Math.floor(20+120*v)],
+  zebra: v => [Math.floor(240-190*v),Math.floor(240-190*v),Math.floor(240-190*v)],
+  corail: v => [Math.floor(220-80*v),Math.floor(110+80*v),Math.floor(220-140*v)],
+  girafe: v => [Math.floor(255-130*v),Math.floor(230-100*v),Math.floor(150-80*v)],
+  cameleon: v => [Math.floor(100+100*v),Math.floor(200-90*v),Math.floor(120+90*v)],
+  sable: v => [Math.floor(240-60*v),Math.floor(210-50*v),Math.floor(160-40*v)],
+  chlorophylle: v => [Math.floor(50+20*v),Math.floor(160+70*v),Math.floor(60+20*v)],
+  feu: v => [Math.floor(240-100*v),Math.floor(90+120*v),Math.floor(40+100*v)],
 };
 
-// -- Rendu des contours --
-function edgeDetect(vmap, w, h) {
-  const out = new Float32Array(vmap.length);
-  for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){
-    let i = x+y*w;
-    let dx = (vmap[i-1] - vmap[i+1])/2, dy = (vmap[i-w] - vmap[i+w])/2;
-    out[i] = Math.sqrt(dx*dx+dy*dy)*3;
-  }
-  return out;
-}
+/////////////////////////////
+// INITIALISATION CANEVAS
+/////////////////////////////
 
-function heatMap(val) {
-  // Viridis/heatmap simple
-  let t = Math.max(0, Math.min(1, val));
-  let r = Math.floor(255 * Math.sqrt(t));
-  let g = Math.floor(200 * t);
-  let b = Math.floor(140 * (1-t));
-  return [r, g, b];
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() {
+  let w = Math.min(window.innerWidth * 0.96, 960);
+  let h = w * CANVAS_H / CANVAS_W;
+  if (window.innerHeight < h + 220) h = window.innerHeight - 200, w = h * CANVAS_W / CANVAS_H;
+  canvas.width = Math.round(w);
+  canvas.height = Math.round(h);
 }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-// -- Initialisation du champ --
-function initField(seed=true) {
+function initField(noise=0) {
   U = new Float32Array(N).fill(1);
   V = new Float32Array(N).fill(0);
   U2 = new Float32Array(N);
   V2 = new Float32Array(N);
-
   let s = 36;
   for (let y = CANVAS_H/2-s; y < CANVAS_H/2+s; y++)
     for (let x = CANVAS_W/2-s; x < CANVAS_W/2+s; x++) {
       let i = x + y*CANVAS_W;
       if (i >= 0 && i < N) V[i] = 1.0;
     }
-  if(seed){
-    for(let i=0;i<300;i++){
-      let x = Math.floor(Math.random()*CANVAS_W), y = Math.floor(Math.random()*CANVAS_H);
-      V[x+y*CANVAS_W] += Math.random()*0.5;
+  // Bruit initial ?
+  if(noise>0){
+    for(let i=0; i<N; i++){
+      if(Math.random()<noise) U[i]=Math.random(); 
+      if(Math.random()<noise) V[i]=Math.random();
     }
   }
 }
+initField();
 
-// -- Canvas dynamique/responsive --
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+/////////////////////////////
+// COEUR DE LA SIMULATION
+/////////////////////////////
 
-function resizeCanvas() {
-  let w = Math.min(window.innerWidth * 0.97, 900);
-  let h = w * CANVAS_H / CANVAS_W;
-  if (window.innerHeight < h + 200) h = window.innerHeight - 160, w = h * CANVAS_W / CANVAS_H;
-  canvas.width = Math.round(w);
-  canvas.height = Math.round(h);
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-// -- Laplacien circulaire --
 const LAPLACE_KERNEL = [
   [0.05, 0.2, 0.05],
   [0.2, -1, 0.2],
   [0.05, 0.2, 0.05]
 ];
-
 function laplace(A, x, y) {
   let sum = 0;
   for (let dy = -1; dy <= 1; dy++)
@@ -101,60 +91,35 @@ function laplace(A, x, y) {
     }
   return sum;
 }
-
-// -- Simulation Gray-Scott --
 function updateField() {
   for (let y = 0; y < CANVAS_H; y++) {
     for (let x = 0; x < CANVAS_W; x++) {
-      let i = x + y*CANVAS_W, u = U[i], v = V[i];
+      let i = x + y*CANVAS_W;
+      let u = U[i], v = V[i];
       let du = params.diffU * laplace(U, x, y) - u*v*v + params.feed*(1-u);
       let dv = params.diffV * laplace(V, x, y) + u*v*v - (params.kill+params.feed)*v;
-      U2[i] = u + du * 1.3;
-      V2[i] = v + dv * 1.3;
+      U2[i] = Math.min(Math.max(u + du * 1.3,0),1);
+      V2[i] = Math.min(Math.max(v + dv * 1.3,0),1);
     }
   }
   [U, U2] = [U2, U];
   [V, V2] = [V2, V];
 }
 
-// -- Rendu principal --
+/////////////////////////////
+// AFFICHAGE
+/////////////////////////////
+
 function renderField() {
   let img = ctx.createImageData(CANVAS_W, CANVAS_H);
-  let contrast = params.contrast, gain = params.gain, offset = params.offset;
-  let palette = PALETTES[params.palette];
-  let renderMode = params.renderMode;
-  let Vdraw = V;
-
-  // Modes spéciaux
-  if (renderMode === "contours") {
-    Vdraw = edgeDetect(V, CANVAS_W, CANVAS_H);
-  }
   for (let i = 0; i < N; i++) {
-    let v = Math.max(0, Math.min(1, Vdraw[i]));
-    v = Math.pow(v, gain)*contrast + offset;
-    v = Math.max(0, Math.min(1, v));
-    let rgb;
-    if (renderMode === "heat") rgb = heatMap(v);
-    else if (palette.length === 2) { // palette binaire
-      rgb = [
-        palette[0][0]*v+palette[1][0]*(1-v),
-        palette[0][1]*v+palette[1][1]*(1-v),
-        palette[0][2]*v+palette[1][2]*(1-v)
-      ];
-    } else { // interpolation multi
-      let idx = v * (palette.length-1);
-      let i0 = Math.floor(idx), i1 = Math.min(i0+1, palette.length-1);
-      let t = idx-i0;
-      rgb = [
-        palette[i0][0]*(1-t) + palette[i1][0]*t,
-        palette[i0][1]*(1-t) + palette[i1][1]*t,
-        palette[i0][2]*(1-t) + palette[i1][2]*t
-      ];
-    }
-    img.data[i*4+0] = Math.floor(rgb[0]);
-    img.data[i*4+1] = Math.floor(rgb[1]);
-    img.data[i*4+2] = Math.floor(rgb[2]);
-    img.data[i*4+3] = 255;
+    let v = Math.max(0, Math.min(1, V[i]));
+    if(invert) v=1-v;
+    let rgb = PALETTES[colorPalette](v);
+    img.data[i*4 + 0] = rgb[0];
+    img.data[i*4 + 1] = rgb[1];
+    img.data[i*4 + 2] = rgb[2];
+    img.data[i*4 + 3] = 255;
   }
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.putImageData(img, 0, 0);
@@ -165,7 +130,10 @@ function renderField() {
   }
 }
 
-// -- Animation --
+/////////////////////////////
+// ANIMATION
+/////////////////////////////
+
 function animate() {
   if (!running) return;
   for (let i = 0; i < params.speed; i++) updateField();
@@ -173,6 +141,158 @@ function animate() {
   animationId = requestAnimationFrame(animate);
 }
 
-// -- Presets UI --
+/////////////////////////////
+// CONTROLES ET UI
+/////////////////////////////
+
+const PRESETS = {
+  tigre:  { feed:0.034, kill:0.056, diffU:0.17, diffV:0.09 },
+  léopard:{ feed:0.037, kill:0.063, diffU:0.15, diffV:0.068 },
+  corail: { feed:0.055, kill:0.062, diffU:0.16, diffV:0.064 },
+    girafe: { feed:0.03,  kill:0.058, diffU:0.21, diffV:0.1 },
+  ondes:  { feed:0.025, kill:0.055, diffU:0.19, diffV:0.05 },
+  zèbre:  { feed:0.025, kill:0.061, diffU:0.18, diffV:0.07 },
+  aléatoire: null // handled dynamically
+};
+
 function applyPreset(name) {
-  let p = PRESETS
+  let p = PRESETS[name];
+  if (p) {
+    for (let k in p) params[k] = p[k];
+  } else {
+    // Aléatoire
+    params.feed = +(Math.random()*0.06+0.02).toFixed(4);
+    params.kill = +(Math.random()*0.06+0.04).toFixed(4);
+    params.diffU = +(Math.random()*0.22+0.08).toFixed(3);
+    params.diffV = +(Math.random()*0.07+0.04).toFixed(3);
+  }
+  for (let k of ['feed','kill','diffU','diffV']) {
+    document.getElementById(k).value = params[k];
+    document.getElementById(k+'num').value = params[k];
+  }
+  initField();
+  renderField();
+}
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.onclick = e => {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    applyPreset(btn.dataset.preset);
+  }
+});
+
+['feed','kill','diffU','diffV'].forEach(k => {
+  let slider = document.getElementById(k);
+  let num = document.getElementById(k+'num');
+  slider.oninput = e => { num.value = slider.value; params[k] = +slider.value; };
+  num.oninput = e => { slider.value = num.value; params[k] = +num.value; };
+});
+document.getElementById('speed').oninput = e => { params.speed = +e.target.value; };
+document.getElementById('zoom').oninput = e => { params.zoom = +e.target.value; };
+
+document.getElementById('reset').onclick = e => { initField(); renderField(); };
+document.getElementById('randomInit').onclick = e => { initField(.45); renderField(); };
+
+document.getElementById('invert').onclick = e => {
+  invert = !invert;
+  renderField();
+};
+
+document.getElementById('pausePlay').onclick = function() {
+  running = !running;
+  this.textContent = running ? "⏸️ Pause" : "▶️ Play";
+  if (running) animate();
+};
+
+document.getElementById('savePng').onclick = function() {
+  // On copie le canvas affiché (zoomé)
+  let url = canvas.toDataURL("image/png");
+  let a = document.createElement("a");
+  a.href = url;
+  a.download = "reaction-diffusion.png";
+  a.click();
+};
+
+///////////////////////////
+// Palette de couleurs
+///////////////////////////
+
+document.getElementById('colorPalette').onchange = function() {
+  colorPalette = this.value;
+  renderField();
+};
+document.getElementById('invertColor').onchange = function() {
+  invert = this.checked;
+  renderField();
+};
+
+///////////////////////////
+// FRACTALE (PERLIN / MANDELBROT)
+///////////////////////////
+
+document.getElementById('fractaleChk').onchange = e => {
+  fractaleMode = e.target.checked;
+  running = !fractaleMode;
+  if (fractaleMode) {
+    renderFractale();
+    cancelAnimationFrame(animationId);
+    document.getElementById('pausePlay').disabled = true;
+  } else {
+    document.getElementById('pausePlay').disabled = false;
+    animate();
+  }
+};
+document.getElementById('fractaleType').onchange = e => {
+  fractaleType = e.target.value;
+  if (fractaleMode) renderFractale();
+};
+
+function renderFractale() {
+  let img = ctx.createImageData(CANVAS_W, CANVAS_H);
+  if (fractaleType === 'perlin') {
+    for (let y = 0; y < CANVAS_H; y++)
+      for (let x = 0; x < CANVAS_W; x++) {
+        let v = Math.abs(Math.sin(x*0.025 + y*0.012 + Math.cos(x*0.03)*0.6));
+        if (invert) v = 1-v;
+        let rgb = PALETTES[colorPalette](v);
+        let i = x + y*CANVAS_W;
+        img.data[i*4+0] = rgb[0];
+        img.data[i*4+1] = rgb[1];
+        img.data[i*4+2] = rgb[2];
+        img.data[i*4+3]=255;
+      }
+  } else {
+    for (let y = 0; y < CANVAS_H; y++)
+      for (let x = 0; x < CANVAS_W; x++) {
+        let zx = (x - CANVAS_W/2)/CANVAS_W*3.2;
+        let zy = (y - CANVAS_H/2)/CANVAS_H*2.2;
+        let cx = -0.7, cy = 0.27015;
+        let i = x + y*CANVAS_W, iter = 0, maxIter = 40;
+        while (zx*zx + zy*zy < 4 && iter < maxIter) {
+          let tmp = zx*zx - zy*zy + cx;
+          zy = 2*zx*zy + cy;
+          zx = tmp;
+          iter++;
+        }
+        let v = iter === maxIter ? 0 : 1-iter/maxIter;
+        if (invert) v = 1-v;
+        let rgb = PALETTES[colorPalette](v);
+        img.data[i*4+0] = rgb[0]; img.data[i*4+1] = rgb[1]; img.data[i*4+2] = rgb[2]; img.data[i*4+3]=255;
+      }
+  }
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.putImageData(img, 0, 0);
+  if (params.zoom !== 160) {
+    let zw = Math.round(CANVAS_W * params.zoom/160);
+    let zh = Math.round(CANVAS_H * params.zoom/160);
+    ctx.drawImage(canvas, 0, 0, CANVAS_W, CANVAS_H, (canvas.width-zw)/2, (canvas.height-zh)/2, zw, zh);
+  }
+}
+
+/////////////////////////////
+// LANCEMENT
+/////////////////////////////
+
+renderField();
+animate();
+
