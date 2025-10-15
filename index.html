@@ -2,7 +2,10 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
     <title>La Hyène — Tatouage & Illustration</title>
     <meta name="description" content="Studio de tatouage et illustration La Hyène · Flashs disponibles, réservation rapide et informations hygiène." />
     <meta property="og:url" content="https://lahyene.art/" />
@@ -21,11 +24,40 @@
         --canvas:#f4f4f5;
         --frost:#ffffffaa;
       }
+      html{
+        max-width:100%;
+        overflow-x:hidden;
+        scroll-behavior:smooth;
+      }
       body{
         background:radial-gradient(circle at top,#fdf2f2 0%,#f4f4f5 45%,#e4e4e7 100%);
         min-height:100vh;
         font-family:'Manrope',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
         overflow-x:hidden;
+        margin:0;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        touch-action:pan-y;
+        overscroll-behavior-y:contain;
+      }
+      main{
+        width:100%;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:0;
+      }
+      main>section{
+        width:100%;
+      }
+      header,main,footer{
+        width:100%;
+      }
+      .section-shell{
+        width:100%;
+        margin-inline:auto;
+        padding-inline:clamp(1.25rem,4vw,2.75rem);
       }
       body::before{
         content:"";
