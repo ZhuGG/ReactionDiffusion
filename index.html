@@ -109,7 +109,7 @@
           </div>
           <div class="relative glass-panel overflow-hidden">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,.65),transparent_65%)]" aria-hidden="true"></div>
-            <img src="assets/img/hero-placeholder.svg" alt="Illustration phare — La Hyène" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl" />
+            <img src="assets/img/hero/studio-lahyene-lyon.jpg" alt="Studio de tatouage La Hyène à Lyon — espace lumineux prêt pour accueillir" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl" loading="lazy" />
           </div>
         </div>
       </section>
@@ -141,24 +141,38 @@
             </div>
             <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Planche du <span id="board-date">JJ/MM/AAAA</span></p>
           </div>
-          <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur">
-            <img src="assets/img/flashboard-placeholder.svg" alt="Planche de flashs disponibles" class="w-full" />
-            <figcaption class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Choisis un numéro et réserve.</figcaption>
-          </figure>
-          <div class="mt-8 grid sm:grid-cols-2 gap-4">
-            <div class="frost-card">
-              <p class="text-[11px] uppercase tracking-[0.18em] text-rose-500 font-semibold">Comment réserver ?</p>
-              <p class="mt-2 text-sm text-zinc-700/90">Envoie un DM avec le numéro du flash, ta disponibilité et une courte présentation.</p>
-              <button id="dmBtn" type="button" class="mt-4 btn bg-ink text-white rounded-full px-4 py-3 font-bold border border-transparent">DM Instagram</button>
-            </div>
-            <div class="frost-card space-y-3">
-              <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Préparer ton email</p>
-              <p class="text-sm text-zinc-700/90">Précise le numéro du flash ou ton idée, l’emplacement, la taille et ta disponibilité.</p>
-              <div class="flex flex-wrap gap-2">
-                <button id="mailBtn" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Ouvrir l’email</button>
-                <button id="copyMsg" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Copier le message</button>
+          <div class="mt-6 grid lg:grid-cols-[3fr_2fr] gap-6 items-start">
+            <div class="space-y-4">
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:auto-rows-[minmax(0,1fr)]">
+                <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur sm:col-span-2 lg:col-span-1 lg:row-span-2">
+                  <img src="assets/img/flash/planche-flash-complete.jpg" alt="Planche complète de flashs disponibles" class="w-full h-full object-cover" loading="lazy" />
+                  <figcaption class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Planche complète des flashs en cours.</figcaption>
+                </figure>
+                <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur">
+                  <img src="assets/img/flash/planche-flash-detail-1.jpg" alt="Zoom sur les flashs — détails floraux" class="w-full h-full object-cover" loading="lazy" />
+                  <figcaption class="px-4 py-2 text-[11px] text-zinc-600/90 backdrop-blur-sm bg-white/70">Zoom gauche de la planche.</figcaption>
+                </figure>
+                <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur">
+                  <img src="assets/img/flash/planche-flash-detail-2.jpg" alt="Zoom sur les flashs — détails félins" class="w-full h-full object-cover" loading="lazy" />
+                  <figcaption class="px-4 py-2 text-[11px] text-zinc-600/90 backdrop-blur-sm bg-white/70">Zoom droit de la planche.</figcaption>
+                </figure>
               </div>
-              <p id="copyFeedback" class="text-xs text-emerald-600 font-medium hidden">Message copié !</p>
+            </div>
+            <div class="grid gap-4">
+              <div class="frost-card">
+                <p class="text-[11px] uppercase tracking-[0.18em] text-rose-500 font-semibold">Comment réserver ?</p>
+                <p class="mt-2 text-sm text-zinc-700/90">Envoie un DM avec le numéro du flash, ta disponibilité et une courte présentation.</p>
+                <button id="dmBtn" type="button" class="mt-4 btn bg-ink text-white rounded-full px-4 py-3 font-bold border border-transparent">DM Instagram</button>
+              </div>
+              <div class="frost-card space-y-3">
+                <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Préparer ton email</p>
+                <p class="text-sm text-zinc-700/90">Précise le numéro du flash ou ton idée, l’emplacement, la taille et ta disponibilité.</p>
+                <div class="flex flex-wrap gap-2">
+                  <button id="mailBtn" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Ouvrir l’email</button>
+                  <button id="copyMsg" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Copier le message</button>
+                </div>
+                <p id="copyFeedback" class="text-xs text-emerald-600 font-medium hidden">Message copié !</p>
+              </div>
             </div>
           </div>
         </div>
