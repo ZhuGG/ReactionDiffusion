@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>La Hyène — Tatouage & Illustration</title>
     <meta name="description" content="Studio de tatouage et illustration La Hyène · Flashs disponibles, réservation rapide et informations hygiène." />
+    <meta property="og:url" content="https://lahyene.art/" />
+    <meta property="og:site_name" content="La Hyène" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://lahyene.art/" />
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=manrope:300,400,500,600,700|playfair-display:400,500" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,9 +38,10 @@
       }
       .grain{position:fixed;inset:0;pointer-events:none;opacity:.08;z-index:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"220\\" height=\\"220\\"><filter id=\\"n\\"><feTurbulence type=\\"fractalNoise\\" baseFrequency=\\"0.9\\" numOctaves=\\"3\\" stitchTiles=\\"stitch\\"/><feColorMatrix type=\\"saturate\\" values=\\"0\\"/></filter><rect width=\\"100%\\" height=\\"100%\\" filter=\\"url(%23n)\\" opacity=\\"0.55\\"/></svg>');background-size:220px 220px;mix-blend-mode:soft-light;animation:grainShift 18s steps(10) infinite}
       @keyframes grainShift{0%{transform:translate3d(0,0,0);}100%{transform:translate3d(-12%,6%,0);}}
-      .btn{transition:transform .18s ease,box-shadow .18s ease;background:linear-gradient(135deg,#ffffff 0%,#f4f4f5 100%)}
+      .btn{transition:transform .18s ease,box-shadow .18s ease;background:linear-gradient(135deg,#ffffff 0%,#f4f4f5 100%);min-height:44px;padding-inline:1.4rem;padding-block:.75rem;display:inline-flex;align-items:center;justify-content:center}
       .btn:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(15,23,42,.12)}
       .btn.bg-ink{background:linear-gradient(135deg,#111111 0%,#1f2937 100%)}
+      .btn:focus-visible,.footer-link:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
       .input{border-radius:14px;border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.85);padding:.85rem 1rem;outline:none;transition:box-shadow .18s ease,border-color .18s ease}
       .input:focus{box-shadow:0 0 0 3px rgba(220,38,38,.25);border-color:rgba(220,38,38,.65)}
       .frost-card{border-radius:18px;border:1px solid rgba(148,163,184,.2);background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(244,244,245,.65));backdrop-filter:blur(16px);padding:1.1rem 1.2rem;box-shadow:0 15px 45px rgba(15,23,42,.08)}
@@ -53,6 +58,8 @@
       .flash-figure{position:relative;overflow:hidden}
       .flash-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top,rgba(220,38,38,.12),transparent 60%);opacity:.65;pointer-events:none}
       .flash-figure img{position:relative;z-index:1}
+      .flash-trigger{display:block;width:100%;height:100%;position:relative;overflow:hidden;border:none;background:transparent;padding:0;cursor:zoom-in}
+      .flash-trigger:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
       .footer-link{color:rgba(24,24,27,.7);text-decoration:none;transition:color .2s ease}
       .footer-link:hover{color:rgba(24,24,27,1)}
       .brand-card{display:flex;align-items:center;gap:1rem;border-radius:999px;padding:.4rem .9rem .4rem .4rem;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(244,244,245,.8));border:1px solid rgba(148,163,184,.25);box-shadow:0 12px 30px rgba(15,23,42,.08)}
@@ -60,11 +67,26 @@
       .brand-identity{display:flex;flex-direction:column;justify-content:center;gap:.25rem}
       .brand-identity strong{font-family:'Playfair Display',serif;font-size:1rem;letter-spacing:.15em;text-transform:uppercase}
       .brand-identity span{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(63,63,70,.7)}
+      .toast-stack{position:fixed;inset-inline:0;bottom:1.25rem;display:flex;flex-direction:column;align-items:center;gap:.75rem;padding:0 1rem;z-index:60;pointer-events:none}
+      .toast{background:rgba(17,17,17,.92);color:#fff;padding:.65rem 1rem;border-radius:999px;font-size:.9rem;font-weight:600;box-shadow:0 18px 35px rgba(15,23,42,.25);display:flex;align-items:center;gap:.5rem;transition:transform .2s ease,opacity .2s ease;transform:translateY(12px);opacity:0}
+      .toast[data-tone="success"]{background:rgba(22,163,74,.9)}
+      .toast[data-tone="error"]{background:rgba(220,38,38,.92)}
+      .toast[data-visible="true"]{transform:translateY(0);opacity:1}
+      .flash-lightbox{position:fixed;inset:0;background:rgba(15,23,42,.78);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:50}
+      .flash-lightbox[data-open="true"]{display:flex}
+      .flash-lightbox__img{max-width:min(100%,960px);max-height:85vh;border-radius:18px;border:1px solid rgba(255,255,255,.3);box-shadow:0 28px 60px rgba(0,0,0,.35);touch-action:none;transform-origin:center center;transition:transform .2s ease}
+      .flash-lightbox__close{position:absolute;top:1.25rem;right:1.25rem}
+      .mobile-cta{position:fixed;inset-inline:0;bottom:0;padding:env(safe-area-inset-bottom) 1rem 1rem;background:linear-gradient(180deg,transparent 0%,rgba(244,244,245,.85) 35%,rgba(244,244,245,.98) 100%);display:flex;justify-content:center;z-index:40;transition:transform .25s ease,opacity .25s ease}
+      .mobile-cta a{width:100%;max-width:480px}
+      .mobile-cta[data-hidden="true"]{opacity:0;transform:translateY(120%);pointer-events:none}
       @media (min-width:640px){
         .brand-card{padding:.55rem 1.15rem .55rem .55rem}
         .brand-sigil{height:52px;width:52px}
         .brand-identity strong{font-size:1.1rem}
         .brand-identity span{font-size:.7rem}
+      }
+      @media (min-width:768px){
+        .mobile-cta{display:none}
       }
     </style>
   </head>
@@ -74,7 +96,7 @@
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4 section-shell">
         <a href="#top" class="brand-card">
           <span class="brand-sigil">
-            <img src="assets/img/Logo_illu_hyene" alt="Illustration du logo La Hyène" class="h-12 w-12 object-contain" />
+            <img src="assets/img/Logo_illu_hyene" alt="Illustration du logo La Hyène" class="h-12 w-12 object-contain" width="48" height="48" loading="lazy" decoding="async" />
           </span>
           <span class="brand-identity">
             <strong>La Hyène</strong>
@@ -82,9 +104,9 @@
           </span>
         </a>
         <nav class="ml-auto flex items-center gap-2 sm:gap-3">
-          <a href="#flash" class="btn inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold border border-ink/80 text-ink">Flashs</a>
-          <a href="#booking" class="btn inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold border border-ink/80 text-ink">Réserver</a>
-          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn bg-ink text-white inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold border border-transparent">Instagram</a>
+          <a href="#flash" class="btn inline-flex items-center rounded-full text-xs sm:text-sm font-semibold border border-ink/80 text-ink">Flashs</a>
+          <a href="#booking" class="btn inline-flex items-center rounded-full text-xs sm:text-sm font-semibold border border-ink/80 text-ink">Réserver</a>
+          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn bg-ink text-white inline-flex items-center rounded-full text-xs sm:text-sm font-semibold border border-transparent">Instagram</a>
         </nav>
       </div>
     </header>
@@ -104,13 +126,14 @@
             <h1 class="mt-4 text-3xl sm:text-5xl font-semibold text-zinc-900 leading-tight">
               Une expérience sur mesure, entre flashs coups de cœur et projets personnalisés.
             </h1>
-            <p class="mt-5 text-lg text-zinc-700/90 max-w-xl">
-              Axl crée des pièces lumineuses, inspirées par la nature, la poésie et les silhouettes félines. Prête à réserver ? Choisis un flash disponible ou écris-nous pour imaginer ensemble ton tatouage.
+            <p class="mt-5 text-base sm:text-lg text-zinc-700/90 max-w-xl">
+              Axl crée des pièces lumineuses inspirées par la nature et la poésie.
+              <span class="hidden sm:inline"> Prête à réserver ? Choisis un flash disponible ou écris-nous pour imaginer ensemble ton tatouage.</span>
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
-              <a href="#flash" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Voir les flashs</a>
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Instagram @axllahyene</a>
-              <a href="#booking" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-transparent shadow-lg">Réserver maintenant</a>
+              <a href="#flash" class="btn inline-flex items-center rounded-full text-sm font-bold border border-ink/80 text-ink">Voir les flashs</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full text-sm font-bold border border-ink/80 text-ink">Instagram @axllahyene</a>
+              <a href="#booking" class="btn bg-ink text-white inline-flex items-center rounded-full text-sm font-bold border border-transparent shadow-lg">Réserver maintenant</a>
             </div>
             <div class="mt-8 grid gap-4 sm:grid-cols-2">
               <div class="frost-card">
@@ -125,7 +148,9 @@
           </div>
           <div class="relative glass-panel overflow-hidden">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,.65),transparent_65%)]" aria-hidden="true"></div>
-            <img src="assets/img/Illustration_phare" alt="Illustration phare du studio La Hyène" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl" loading="lazy" />
+            <picture>
+              <img src="assets/img/Illustration_phare" alt="Illustration phare du studio La Hyène" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl" loading="lazy" decoding="async" width="1079" height="1050" />
+            </picture>
           </div>
         </div>
       </section>
@@ -137,11 +162,11 @@
             <h2 class="section-title text-3xl font-extrabold tracking-tight justify-center">Liens rapides</h2>
             <p class="mt-3 text-zinc-600">Accède directement aux informations essentielles du studio.</p>
             <div class="mt-6 grid gap-3 link-grid">
-              <a href="#booking" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink shadow">Réserver un flash</a>
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Portfolio Instagram</a>
-              <a href="#flash" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Voir la planche actuelle</a>
-              <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Écrire un email</a>
-              <a href="#contact" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Infos &amp; hygiène</a>
+              <a href="#booking" class="btn inline-flex items-center justify-center rounded-full font-bold text-ink shadow">Réserver un flash</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center justify-center rounded-full font-bold text-ink">Portfolio Instagram</a>
+              <a href="#flash" class="btn inline-flex items-center justify-center rounded-full font-bold text-ink">Voir la planche actuelle</a>
+              <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="btn inline-flex items-center justify-center rounded-full font-bold text-ink">Écrire un email</a>
+              <a href="#contact" class="btn inline-flex items-center justify-center rounded-full font-bold text-ink">Infos &amp; hygiène</a>
             </div>
           </div>
         </div>
@@ -154,28 +179,32 @@
             <div>
               <h2 class="section-title text-3xl font-extrabold tracking-tight">Flashs disponibles</h2>
               <p class="mt-2 text-zinc-600/90 max-w-xl">Pièces dessinées avec soin. Chaque numéro est unique et tatoué une seule fois.</p>
+              <p id="flashPrefill" class="mt-2 hidden text-sm font-medium text-rose-600">Flash n°<span id="flashPrefillNumber"></span> prérempli dans votre message ✨</p>
             </div>
             <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Planche du <span id="board-date">JJ/MM/AAAA</span></p>
           </div>
           <div class="mt-6 grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-6 items-start">
-            <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur overflow-hidden shadow-xl">
-              <img src="assets/img/Plancheflashs" alt="Planche complète de flashs disponibles" class="w-full h-full object-cover" loading="lazy" />
-              <figcaption class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Planche complète des flashs en cours.</figcaption>
+            <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur overflow-hidden shadow-xl" role="group" aria-labelledby="flash-board-caption">
+              <button type="button" class="flash-trigger" data-flash-src="assets/img/flash/planche-flash-complete.jpg" data-flash-alt="Planche complète de flashs disponibles" aria-label="Ouvrir la planche de flashs">
+                <picture>
+                  <img src="assets/img/Plancheflashs" alt="Planche complète de flashs disponibles" class="w-full h-full object-cover" loading="lazy" decoding="async" width="1079" height="542" />
+                </picture>
+              </button>
+              <figcaption id="flash-board-caption" class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Planche complète des flashs en cours.</figcaption>
             </figure>
             <div class="grid gap-4">
               <div class="frost-card">
                 <p class="text-[11px] uppercase tracking-[0.18em] text-rose-500 font-semibold">Comment réserver ?</p>
                 <p class="mt-2 text-sm text-zinc-700/90">Envoie un DM avec le numéro du flash, ta disponibilité et une courte présentation.</p>
-                <button id="dmBtn" type="button" class="mt-4 btn bg-ink text-white rounded-full px-4 py-3 font-bold border border-transparent">DM Instagram</button>
+                <button id="dmBtn" type="button" class="mt-4 btn bg-ink text-white rounded-full font-bold border border-transparent">DM Instagram</button>
               </div>
               <div class="frost-card space-y-3">
                 <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Préparer ton email</p>
                 <p class="text-sm text-zinc-700/90">Précise le numéro du flash ou ton idée, l’emplacement, la taille et ta disponibilité.</p>
                 <div class="flex flex-wrap gap-2">
-                  <button id="mailBtn" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Ouvrir l’email</button>
-                  <button id="copyMsg" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Copier le message</button>
+                  <button id="mailBtn" type="button" class="btn rounded-full font-bold text-ink border border-ink/60">Ouvrir l’email</button>
+                  <button id="copyMsg" type="button" class="btn rounded-full font-bold text-ink border border-ink/60">Copier le message</button>
                 </div>
-                <p id="copyFeedback" class="text-xs text-emerald-600 font-medium hidden">Message copié !</p>
               </div>
             </div>
           </div>
@@ -195,8 +224,8 @@
               <li>Prénom, pronoms et toute info utile pour ton confort</li>
             </ul>
             <div class="mt-5 flex flex-wrap gap-3">
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 font-bold text-ink border border-ink/60">DM Instagram</a>
-              <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 font-bold border border-transparent">Email</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full font-bold text-ink border border-ink/60">DM Instagram</a>
+              <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="btn bg-ink text-white inline-flex items-center rounded-full font-bold border border-transparent">Email</a>
             </div>
           </div>
           <div class="glass-panel p-6 sm:p-8">
@@ -206,6 +235,9 @@
               <iframe title="Plan du studio" src="https://www.openstreetmap.org/export/embed.html?bbox=4.841%2C45.766%2C4.857%2C45.775&amp;layer=mapnik&amp;marker=45.7695%2C4.849"
                       class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer"></iframe>
             </div>
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=45.7695,4.849" target="_blank" rel="noopener" class="mt-3 inline-flex items-center text-sm font-semibold text-rose-600 hover:text-rose-700">
+              Ouvrir dans Google Maps
+            </a>
             <p class="mt-3 text-xs text-zinc-500">À 5 minutes du métro Brotteaux — Accueil sur rendez-vous uniquement.</p>
           </div>
         </div>
@@ -235,6 +267,24 @@
       </section>
     </main>
 
+    <div class="mobile-cta md:hidden" data-hidden="false">
+      <a href="#booking" class="btn bg-ink text-white rounded-full border border-transparent shadow-lg" data-cta-mobile>
+        Prendre RDV
+      </a>
+    </div>
+
+    <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="flash-lightbox" id="flashLightbox" role="dialog" aria-modal="true" aria-labelledby="flashLightboxCaption" tabindex="-1">
+      <button type="button" class="btn flash-lightbox__close bg-ink text-white rounded-full border border-transparent" id="flashLightboxClose">
+        Fermer
+      </button>
+      <figure class="relative max-w-full text-white text-sm text-center space-y-3">
+        <img src="" alt="" id="flashLightboxImg" class="flash-lightbox__img" decoding="async" loading="lazy" width="1079" height="542" />
+        <figcaption id="flashLightboxCaption" class="opacity-90"></figcaption>
+      </figure>
+    </div>
+
     <footer class="border-t border-white/50 bg-white/80 backdrop-blur">
       <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 section-shell">
         <p class="text-sm text-zinc-600">© <span id="year"></span> La Hyène — Axl Mili</p>
@@ -245,32 +295,62 @@
     </footer>
 
     <script>
-      const yearSpan = document.getElementById('year');
+      const $ = (selector, scope = document) => scope.querySelector(selector);
+
+      const yearSpan = $('#year');
       if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
       }
 
-      const boardDateElement = document.getElementById('board-date');
+      const boardDateElement = $('#board-date');
       if (boardDateElement) {
-        const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const formatter = new Intl.DateTimeFormat('fr-FR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
         boardDateElement.textContent = formatter.format(new Date());
       }
 
-      const dmBtn = document.getElementById('dmBtn');
-      if (dmBtn) {
-        dmBtn.addEventListener('click', () => {
-          window.open('https://www.instagram.com/axllahyene', '_blank', 'noopener');
+      const toastStack = $('#toastStack');
+      const showToast = (message, tone = 'neutral', duration = 2600) => {
+        if (!toastStack) return;
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        toast.dataset.visible = 'false';
+        toast.setAttribute('role', 'status');
+        if (tone !== 'neutral') {
+          toast.dataset.tone = tone;
+        }
+        toastStack.appendChild(toast);
+        requestAnimationFrame(() => {
+          toast.dataset.visible = 'true';
         });
+        const hide = () => {
+          toast.dataset.visible = 'false';
+          setTimeout(() => toast.remove(), 220);
+        };
+        setTimeout(hide, duration);
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const flashNumberParam = params.get('n');
+      const flashPrefill = $('#flashPrefill');
+      const flashPrefillNumber = $('#flashPrefillNumber');
+      if (flashNumberParam && flashPrefill && flashPrefillNumber) {
+        flashPrefillNumber.textContent = flashNumberParam;
+        flashPrefill.classList.remove('hidden');
       }
 
-      const mailBtn = document.getElementById('mailBtn');
-      const mailtoLink = document.getElementById('mailtoLink');
-      const mailtoLinkPrimary = document.getElementById('mailtoLinkPrimary');
-      const messageTemplate = `Bonjour La Hyène,\n\nJe souhaiterais réserver un flash. Voici les informations :\n• Numéro du flash ou idée : ___\n• Emplacement : ___\n• Taille approximative : ___\n• Disponibilités : ___\n\nMerci !`;
+      const buildMessageTemplate = () => {
+        const numberLine = flashNumberParam ? `Flash n°${flashNumberParam}` : '___';
+        return `Bonjour La Hyène,\n\nJe souhaiterais réserver un flash. Voici les informations :\n• Numéro du flash ou idée : ${numberLine}\n• Emplacement : ___\n• Taille approximative : ___\n• Disponibilités : ___\n\nMerci !`;
+      };
 
       const openMail = () => {
         const subject = encodeURIComponent('Demande de réservation — La Hyène');
-        const body = encodeURIComponent(messageTemplate);
+        const body = encodeURIComponent(buildMessageTemplate());
         window.location.href = `mailto:bonjour@lahyene.art?subject=${subject}&body=${body}`;
       };
 
@@ -282,32 +362,268 @@
         });
       };
 
-      attachMailHandler(mailBtn);
-      attachMailHandler(mailtoLink);
-      attachMailHandler(mailtoLinkPrimary);
+      attachMailHandler($('#mailBtn'));
+      attachMailHandler($('#mailtoLink'));
+      attachMailHandler($('#mailtoLinkPrimary'));
 
-      const copyBtn = document.getElementById('copyMsg');
-      const feedback = document.getElementById('copyFeedback');
-      if (copyBtn && navigator.clipboard) {
+      const dmBtn = $('#dmBtn');
+      if (dmBtn) {
+        dmBtn.addEventListener('click', () => {
+          window.open('https://www.instagram.com/axllahyene', '_blank', 'noopener');
+        });
+      }
+
+      const copyBtn = $('#copyMsg');
+      if (copyBtn) {
+        const fallbackCopy = (text) => {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'absolute';
+          textarea.style.left = '-9999px';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+        };
+
         copyBtn.addEventListener('click', async () => {
+          const message = buildMessageTemplate();
           try {
-            await navigator.clipboard.writeText(messageTemplate);
-            if (feedback) {
-              feedback.classList.remove('hidden');
-              feedback.classList.remove('text-rose-600');
-              feedback.classList.add('text-emerald-600');
-              feedback.textContent = 'Message copié !';
-              setTimeout(() => feedback.classList.add('hidden'), 2500);
+            if (navigator.clipboard?.writeText) {
+              await navigator.clipboard.writeText(message);
+            } else {
+              fallbackCopy(message);
             }
+            showToast('Message copié ✨', 'success');
           } catch (error) {
-            if (feedback) {
-              feedback.classList.remove('hidden');
-              feedback.classList.remove('text-emerald-600');
-              feedback.classList.add('text-rose-600');
-              feedback.textContent = 'Impossible de copier, sélectionne le texte manuellement.';
-            }
+            showToast('Impossible de copier — sélectionne le texte manuellement.', 'error');
           }
         });
+      }
+
+      const flashLightbox = $('#flashLightbox');
+      const flashLightboxImg = $('#flashLightboxImg');
+      const flashLightboxCaption = $('#flashLightboxCaption');
+      const flashLightboxClose = $('#flashLightboxClose');
+      let lightboxScrollPosition = 0;
+
+      const pointers = new Map();
+      let initialDistance = null;
+      let initialScale = 1;
+      let lastCenter = null;
+      let scale = 1;
+      const translate = { x: 0, y: 0 };
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      const clampTranslation = () => {
+        if (!flashLightboxImg) return;
+        const width = flashLightboxImg.clientWidth;
+        const height = flashLightboxImg.clientHeight;
+        const limitX = width ? (width * (scale - 1)) / 2 : 0;
+        const limitY = height ? (height * (scale - 1)) / 2 : 0;
+        translate.x = clamp(translate.x, -limitX, limitX);
+        translate.y = clamp(translate.y, -limitY, limitY);
+      };
+
+      const updateTransform = () => {
+        if (!flashLightboxImg) return;
+        clampTranslation();
+        flashLightboxImg.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
+      };
+
+      const resetTransform = () => {
+        scale = 1;
+        translate.x = 0;
+        translate.y = 0;
+        initialDistance = null;
+        lastCenter = null;
+        updateTransform();
+      };
+
+      const setBodyScrollLocked = (locked) => {
+        if (locked) {
+          lightboxScrollPosition = window.scrollY;
+          document.body.style.top = `-${lightboxScrollPosition}px`;
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.style.overflow = '';
+          window.scrollTo({ top: lightboxScrollPosition });
+        }
+      };
+
+      const openLightbox = (src, alt) => {
+        if (!flashLightbox || !flashLightboxImg) return;
+        flashLightboxImg.src = src;
+        flashLightboxImg.alt = alt;
+        if (flashLightboxCaption) {
+          flashLightboxCaption.textContent = alt;
+        }
+        flashLightbox.dataset.open = 'true';
+        setBodyScrollLocked(true);
+        requestAnimationFrame(() => {
+          resetTransform();
+          flashLightbox?.focus?.();
+          flashLightboxClose?.focus();
+        });
+      };
+
+      const closeLightbox = () => {
+        if (!flashLightbox) return;
+        flashLightbox.dataset.open = 'false';
+        setBodyScrollLocked(false);
+        resetTransform();
+      };
+
+      if (flashLightboxClose) {
+        flashLightboxClose.addEventListener('click', () => closeLightbox());
+      }
+
+      if (flashLightbox) {
+        flashLightbox.addEventListener('click', (event) => {
+          if (event.target === flashLightbox) {
+            closeLightbox();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && flashLightbox?.dataset.open === 'true') {
+          closeLightbox();
+        }
+      });
+
+      const getDistance = ([first, second]) => {
+        const dx = second.x - first.x;
+        const dy = second.y - first.y;
+        return Math.hypot(dx, dy);
+      };
+
+      const getCenter = ([first, second]) => ({
+        x: (first.x + second.x) / 2,
+        y: (first.y + second.y) / 2,
+      });
+
+      if (flashLightboxImg) {
+        flashLightboxImg.addEventListener('pointerdown', (event) => {
+          flashLightboxImg.setPointerCapture(event.pointerId);
+          pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+          if (pointers.size === 2) {
+            const values = Array.from(pointers.values());
+            initialDistance = getDistance(values);
+            initialScale = scale;
+            lastCenter = getCenter(values);
+          }
+        });
+
+        flashLightboxImg.addEventListener('pointermove', (event) => {
+          if (!pointers.has(event.pointerId)) return;
+          const previous = pointers.get(event.pointerId);
+          pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+          if (pointers.size === 2) {
+            const values = Array.from(pointers.values());
+            const distance = getDistance(values);
+            if (initialDistance) {
+              const relativeScale = distance / initialDistance;
+              scale = clamp(initialScale * relativeScale, 1, 3.5);
+            }
+            const center = getCenter(values);
+            if (lastCenter) {
+              translate.x += center.x - lastCenter.x;
+              translate.y += center.y - lastCenter.y;
+            }
+            lastCenter = center;
+          } else if (pointers.size === 1 && scale > 1 && previous) {
+            translate.x += event.clientX - previous.x;
+            translate.y += event.clientY - previous.y;
+          }
+
+          updateTransform();
+        });
+
+        const pointerCleanup = (event) => {
+          pointers.delete(event.pointerId);
+          if (pointers.size < 2) {
+            initialDistance = null;
+            lastCenter = null;
+            initialScale = scale;
+          }
+          if (pointers.size === 0 && scale === 1) {
+            resetTransform();
+          }
+        };
+
+        flashLightboxImg.addEventListener('pointerup', pointerCleanup);
+        flashLightboxImg.addEventListener('pointercancel', pointerCleanup);
+        flashLightboxImg.addEventListener('pointerout', (event) => {
+          if (!flashLightbox?.contains(event.relatedTarget)) {
+            pointerCleanup(event);
+          }
+        });
+
+        flashLightboxImg.addEventListener('wheel', (event) => {
+          event.preventDefault();
+          const delta = event.deltaY;
+          scale = clamp(delta > 0 ? scale - 0.15 : scale + 0.15, 1, 3.5);
+          updateTransform();
+        }, { passive: false });
+
+        let lastTap = 0;
+        const handleZoomToggle = (clientX, clientY) => {
+          if (!flashLightboxImg) return;
+          const rect = flashLightboxImg.getBoundingClientRect();
+          if (scale > 1.1) {
+            scale = 1;
+            translate.x = 0;
+            translate.y = 0;
+          } else {
+            scale = 2;
+            translate.x -= (clientX - (rect.left + rect.width / 2)) / scale;
+            translate.y -= (clientY - (rect.top + rect.height / 2)) / scale;
+          }
+          updateTransform();
+        };
+
+        flashLightboxImg.addEventListener('click', (event) => {
+          const now = Date.now();
+          if (now - lastTap < 300) {
+            handleZoomToggle(event.clientX, event.clientY);
+          }
+          lastTap = now;
+        });
+
+        flashLightboxImg.addEventListener('dblclick', (event) => {
+          event.preventDefault();
+          handleZoomToggle(event.clientX, event.clientY);
+        });
+      }
+
+      document.querySelectorAll('.flash-trigger').forEach((button) => {
+        button.addEventListener('click', () => {
+          const src = button.getAttribute('data-flash-src');
+          const alt = button.getAttribute('data-flash-alt') || 'Planche de flashs';
+          if (src) {
+            openLightbox(src, alt);
+          }
+        });
+      });
+
+      const mobileCta = $('.mobile-cta');
+      const bookingSection = $('#booking');
+      if (mobileCta && bookingSection && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            mobileCta.dataset.hidden = entry.isIntersecting ? 'true' : 'false';
+          });
+        }, { rootMargin: '0px 0px -35% 0px' });
+        observer.observe(bookingSection);
       }
     </script>
   </body>
