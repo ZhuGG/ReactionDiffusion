@@ -1,125 +1,296 @@
-    :root{
-      color-scheme:light;
-      --ink:#111111;
-      --accent:#dc2626;
-      --accent-soft:#f87171;
-      --canvas:#f4f4f5;
-      --frost:#ffffffaa;
-    }
-    body{
-      background:radial-gradient(circle at top,#fdf2f2 0%,#f4f4f5 45%,#e4e4e7 100%);
-      min-height:100vh;
-    }
-    body::before{
-      content:"";
-      position:fixed;
-      inset:-30%;
-      background:radial-gradient(circle at 20% 20%,rgba(248,113,113,.16),transparent 45%),radial-gradient(circle at 80% 10%,rgba(59,130,246,.12),transparent 50%);
-      filter:blur(60px);
-      opacity:.7;
-      z-index:0;
-      pointer-events:none;
-    }
-    .grain{position:fixed;inset:0;pointer-events:none;opacity:.08;z-index:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"220\\" height=\\"220\\"><filter id=\\"n\\"><feTurbulence type=\\"fractalNoise\\" baseFrequency=\\"0.9\\" numOctaves=\\"3\\" stitchTiles=\\"stitch\\"/><feColorMatrix type=\\"saturate\\" values=\\"0\\"/></filter><rect width=\\"100%\\" height=\\"100%\\" filter=\\"url(%23n)\\" opacity=\\"0.55\\"/></svg>');background-size:220px 220px;mix-blend-mode:soft-light;animation:grainShift 18s steps(10) infinite}
-    @keyframes grainShift{0%{transform:translate3d(0,0,0);}100%{transform:translate3d(-12%,6%,0);}}
-    .btn{transition:transform .18s ease,box-shadow .18s ease;background:linear-gradient(135deg,#ffffff 0%,#f4f4f5 100%)}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(15,23,42,.12)}
-    .btn.bg-ink{background:linear-gradient(135deg,#111111 0%,#1f2937 100%)}
-    .input{border-radius:14px;border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.85);padding:.85rem 1rem;outline:none;transition:box-shadow .18s ease,border-color .18s ease}
-    .input:focus{box-shadow:0 0 0 3px rgba(220,38,38,.25);border-color:rgba(220,38,38,.65)}
-    .frost-card{border-radius:18px;border:1px solid rgba(148,163,184,.2);background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(244,244,245,.65));backdrop-filter:blur(16px);padding:1.1rem 1.2rem;box-shadow:0 15px 45px rgba(15,23,42,.08)}
-    .hero-gradient{position:absolute;inset:-120px -40px 0;background:radial-gradient(circle at top left,rgba(248,113,113,.4),transparent 55%),radial-gradient(circle at 80% 10%,rgba(56,189,248,.35),transparent 50%),linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(244,244,245,.9) 70%,rgba(250,250,250,0) 100%);opacity:.9;z-index:0}
-    .hero-blob{position:absolute;border-radius:9999px;filter:blur(0);opacity:.55;background:radial-gradient(circle at 30% 30%,rgba(248,113,113,.65),rgba(248,113,113,0));box-shadow:0 30px 80px rgba(248,113,113,.25);animation:blobFloat 12s ease-in-out infinite}
-    .hero-blob--secondary{background:radial-gradient(circle at 70% 30%,rgba(56,189,248,.6),rgba(56,189,248,0));animation-duration:16s}
-    @keyframes blobFloat{0%,100%{transform:translate3d(0,0,0) scale(1);}50%{transform:translate3d(12px,-20px,0) scale(1.08);}}
-    .section-title{position:relative;display:inline-flex;align-items:center;gap:.5rem}
-    .section-title::after{content:"";display:block;height:2px;width:44px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:999px}
-    .section-shell{position:relative;z-index:1}
-    .glass-panel{position:relative;border-radius:22px;border:1px solid rgba(148,163,184,.18);background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(244,244,245,.78));box-shadow:0 28px 60px rgba(15,23,42,.12)}
-    .link-grid a{background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(244,244,245,.75));border:1px solid rgba(148,163,184,.2)}
-    .link-grid a:hover{border-color:rgba(220,38,38,.45);box-shadow:0 18px 40px rgba(220,38,38,.18)}
-    .flash-figure{position:relative;overflow:hidden}
-    .flash-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top,rgba(220,38,38,.12),transparent 60%);opacity:.65;pointer-events:none}
-    .flash-figure img{position:relative;z-index:1}
-<body class="relative bg-gradient-to-b from-zinc-50 to-zinc-100 text-ink font-sans antialiased">
-  <header class="sticky top-0 z-50 bg-white/75 backdrop-blur border-b border-white/40">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3 section-shell">
-  <section class="relative overflow-hidden py-16 sm:py-20">
-    <div class="hero-gradient"></div>
-    <div class="hero-blob absolute w-56 h-56 -top-20 -left-10 hidden sm:block" aria-hidden="true"></div>
-    <div class="hero-blob hero-blob--secondary absolute w-64 h-64 -bottom-10 -right-16 hidden sm:block" aria-hidden="true"></div>
-    <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center section-shell">
-      <div class="relative z-10">
-        <div class="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-white/80 px-3 py-1 text-xs font-medium mb-4 shadow">
-          <span class="block text-2xl sm:text-3xl font-light italic mt-3 text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-indigo-500">Tatouage & Illustration</span>
-        <p class="mt-5 text-lg text-zinc-700/90 max-w-xl">
-          <a href="#flash" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Voir les flashs</a>
-          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Instagram @axllahyene</a>
-          <a href="#booking" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-transparent shadow-lg">Réserver maintenant</a>
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>La Hyène — Tatouage & Illustration</title>
+    <meta name="description" content="Studio de tatouage et illustration La Hyène · Flashs disponibles, réservation rapide et informations hygiène." />
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=manrope:300,400,500,600,700|playfair-display:400,500" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root{
+        color-scheme:light;
+        --ink:#111111;
+        --accent:#dc2626;
+        --accent-soft:#f87171;
+        --canvas:#f4f4f5;
+        --frost:#ffffffaa;
+      }
+      body{
+        background:radial-gradient(circle at top,#fdf2f2 0%,#f4f4f5 45%,#e4e4e7 100%);
+        min-height:100vh;
+        font-family:'Manrope',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      }
+      body::before{
+        content:"";
+        position:fixed;
+        inset:-30%;
+        background:radial-gradient(circle at 20% 20%,rgba(248,113,113,.16),transparent 45%),radial-gradient(circle at 80% 10%,rgba(59,130,246,.12),transparent 50%);
+        filter:blur(60px);
+        opacity:.7;
+        z-index:0;
+        pointer-events:none;
+      }
+      .grain{position:fixed;inset:0;pointer-events:none;opacity:.08;z-index:0;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"220\\" height=\\"220\\"><filter id=\\"n\\"><feTurbulence type=\\"fractalNoise\\" baseFrequency=\\"0.9\\" numOctaves=\\"3\\" stitchTiles=\\"stitch\\"/><feColorMatrix type=\\"saturate\\" values=\\"0\\"/></filter><rect width=\\"100%\\" height=\\"100%\\" filter=\\"url(%23n)\\" opacity=\\"0.55\\"/></svg>');background-size:220px 220px;mix-blend-mode:soft-light;animation:grainShift 18s steps(10) infinite}
+      @keyframes grainShift{0%{transform:translate3d(0,0,0);}100%{transform:translate3d(-12%,6%,0);}}
+      .btn{transition:transform .18s ease,box-shadow .18s ease;background:linear-gradient(135deg,#ffffff 0%,#f4f4f5 100%)}
+      .btn:hover{transform:translateY(-2px);box-shadow:0 18px 35px rgba(15,23,42,.12)}
+      .btn.bg-ink{background:linear-gradient(135deg,#111111 0%,#1f2937 100%)}
+      .input{border-radius:14px;border:1px solid rgba(148,163,184,.35);background:rgba(255,255,255,.85);padding:.85rem 1rem;outline:none;transition:box-shadow .18s ease,border-color .18s ease}
+      .input:focus{box-shadow:0 0 0 3px rgba(220,38,38,.25);border-color:rgba(220,38,38,.65)}
+      .frost-card{border-radius:18px;border:1px solid rgba(148,163,184,.2);background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(244,244,245,.65));backdrop-filter:blur(16px);padding:1.1rem 1.2rem;box-shadow:0 15px 45px rgba(15,23,42,.08)}
+      .hero-gradient{position:absolute;inset:-120px -40px 0;background:radial-gradient(circle at top left,rgba(248,113,113,.4),transparent 55%),radial-gradient(circle at 80% 10%,rgba(56,189,248,.35),transparent 50%),linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(244,244,245,.9) 70%,rgba(250,250,250,0) 100%);opacity:.9;z-index:0}
+      .hero-blob{position:absolute;border-radius:9999px;filter:blur(0);opacity:.55;background:radial-gradient(circle at 30% 30%,rgba(248,113,113,.65),rgba(248,113,113,0));box-shadow:0 30px 80px rgba(248,113,113,.25);animation:blobFloat 12s ease-in-out infinite}
+      .hero-blob--secondary{background:radial-gradient(circle at 70% 30%,rgba(56,189,248,.6),rgba(56,189,248,0));animation-duration:16s}
+      @keyframes blobFloat{0%,100%{transform:translate3d(0,0,0) scale(1);}50%{transform:translate3d(12px,-20px,0) scale(1.08);}}
+      .section-title{position:relative;display:inline-flex;align-items:center;gap:.5rem}
+      .section-title::after{content:"";display:block;height:2px;width:44px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:999px}
+      .section-shell{position:relative;z-index:1}
+      .glass-panel{position:relative;border-radius:22px;border:1px solid rgba(148,163,184,.18);background:linear-gradient(160deg,rgba(255,255,255,.95),rgba(244,244,245,.78));box-shadow:0 28px 60px rgba(15,23,42,.12)}
+      .link-grid a{background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(244,244,245,.75));border:1px solid rgba(148,163,184,.2)}
+      .link-grid a:hover{border-color:rgba(220,38,38,.45);box-shadow:0 18px 40px rgba(220,38,38,.18)}
+      .flash-figure{position:relative;overflow:hidden}
+      .flash-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at top,rgba(220,38,38,.12),transparent 60%);opacity:.65;pointer-events:none}
+      .flash-figure img{position:relative;z-index:1}
+      .footer-link{color:rgba(24,24,27,.7);text-decoration:none;transition:color .2s ease}
+      .footer-link:hover{color:rgba(24,24,27,1)}
+    </style>
+  </head>
+  <body class="relative bg-gradient-to-b from-zinc-50 to-zinc-100 text-ink font-sans antialiased">
+    <div class="grain" aria-hidden="true"></div>
+    <header class="sticky top-0 z-50 bg-white/75 backdrop-blur border-b border-white/40">
+      <div class="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3 section-shell">
+        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-red-400 via-rose-400 to-sky-400 shadow"></div>
+        <div>
+          <p class="text-xs uppercase tracking-[0.3em] text-zinc-500">La Hyène</p>
+          <p class="text-sm sm:text-base font-semibold text-zinc-800">Tatouage &amp; Illustration à Lyon</p>
         </div>
-        <div class="mt-8 grid gap-4 sm:grid-cols-2">
-          <div class="frost-card">
-            <p class="text-[11px] uppercase tracking-[0.18em] text-red-500/90 font-semibold">Dispo du moment</p>
-            <p class="mt-1 text-sm text-zinc-700/90">Mai · 2 créneaux flash disponibles — DM rapide recommandé.</p>
-          </div>
-          <div class="frost-card">
-            <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Ambiance</p>
-            <p class="mt-1 text-sm text-zinc-700/90">Studio lumineux, playlist chill, respect de la peau et de tes idées.</p>
-          </div>
-      <div class="relative glass-panel overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,.65),transparent_65%)]"></div>
-        <img data-asset="hero" alt="Illustration phare — La Hyène" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl">
-  <section id="links" class="relative bg-white/70 backdrop-blur-sm py-16">
-    <div class="absolute inset-x-0 -top-10 h-24 bg-gradient-to-b from-red-100/30 to-transparent pointer-events-none"></div>
-    <div class="max-w-3xl mx-auto px-4 section-shell">
-      <div class="glass-panel p-6 sm:p-8 text-center">
-        <h2 class="section-title text-3xl font-extrabold tracking-tight justify-center">Liens rapides</h2>
-        <div class="mt-6 grid gap-3 link-grid">
-          <a href="#booking" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink shadow">Réserver un flash</a>
-          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Portfolio Instagram</a>
-          <a href="#flash" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Voir la planche actuelle</a>
-          <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Écrire un email</a>
-          <a href="#contact" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Infos & hygiène</a>
-  <section id="flash" class="relative bg-white/60 py-16">
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-200/70 to-transparent"></div>
-    <div class="max-w-5xl mx-auto px-4 section-shell">
-      <div class="flex items-end justify-between gap-4 mb-6">
-        <h2 class="section-title text-3xl font-extrabold tracking-tight">Flashs disponibles</h2>
-        <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Planche du <span id="board-date">JJ/MM/AAAA</span></p>
-      <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur">
-        <figcaption class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Choisis un numéro et réserve.</figcaption>
-      <div class="mt-8 grid sm:grid-cols-2 gap-4">
-        <div class="frost-card">
-            <button id="dmBtn" class="btn bg-ink text-white rounded-full px-4 py-3 font-bold border border-transparent">DM Instagram</button>
-        <div class="frost-card">
-            <button id="mailBtn" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Ouvrir l’email</button>
-            <button id="copyMsg" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Copier le message</button>
-  <section id="booking" class="relative bg-zinc-50/80 py-16">
-    <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-200/40 to-transparent pointer-events-none"></div>
-    <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-8 section-shell">
-      <div class="glass-panel p-6 sm:p-8">
-        <h3 class="text-2xl font-extrabold mb-3 flex items-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-red-500"></span>Prendre rendez‑vous</h3>
-        <p class="text-zinc-700/90">DM Instagram recommandé pour la réactivité. Email possible avec détails :</p>
-        <ul class="mt-3 text-sm text-zinc-700 list-disc ml-5 space-y-1.5">
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 font-bold text-ink border border-ink/60">DM Instagram</a>
-          <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 font-bold border border-transparent">Email</a>
-      <div class="glass-panel p-6 sm:p-8">
-        <h3 class="text-2xl font-extrabold mb-3 flex items-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-sky-500"></span>Localisation</h3>
-        <p class="text-sm text-zinc-700/90">GOLDENLINE — Lyon 6e<br>Quartier Brotteaux / Masséna</p>
-        <div class="mt-4 aspect-[4/3] overflow-hidden rounded-xl border border-white/60 shadow-lg">
-  <section id="contact" class="relative bg-white/70 py-16">
-    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent"></div>
-    <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-8 section-shell">
-      <div class="glass-panel p-6 sm:p-8">
-        <h3 class="text-2xl font-extrabold mb-3">Contact</h3>
-        <ul class="space-y-2 text-zinc-700/90">
-      <div class="glass-panel p-6 sm:p-8">
-        <h3 class="text-2xl font-extrabold mb-3">Infos & hygiène</h3>
-        <ul class="space-y-2 text-zinc-700/90 text-sm">
-  <footer class="border-t border-white/50 bg-white/80 backdrop-blur">
-    <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 section-shell">
-        <p class="text-sm text-zinc-600">© <span id="year"></span> La Hyène — Axl Mili</p>
+        <div class="ml-auto flex items-center gap-3">
+          <a href="#booking" class="btn inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold border border-ink/80 text-ink">Réserver</a>
+          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn bg-ink text-white inline-flex items-center rounded-full px-4 py-2 text-xs sm:text-sm font-semibold border border-transparent">Instagram</a>
+        </div>
       </div>
-      <div class="text-[12px] text-zinc-500 text-center md:text-right">
-        v1.0 • Mobile-first • Flashboard unique • DM/Email en 1 clic
+    </header>
+
+    <main>
+      <section class="relative overflow-hidden py-16 sm:py-20">
+        <div class="hero-gradient" aria-hidden="true"></div>
+        <div class="hero-blob absolute w-56 h-56 -top-20 -left-10 hidden sm:block" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob--secondary absolute w-64 h-64 -bottom-10 -right-16 hidden sm:block" aria-hidden="true"></div>
+        <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center section-shell">
+          <div class="relative z-10">
+            <div class="inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-white/80 px-3 py-1 text-xs font-medium mb-4 shadow">
+              <span class="inline-block h-2 w-2 rounded-full bg-gradient-to-r from-red-500 via-rose-500 to-indigo-500"></span>
+              <span class="tracking-[0.35em] uppercase text-zinc-500">Studio privé</span>
+            </div>
+            <span class="block text-2xl sm:text-3xl font-light italic text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-indigo-500">Tatouage &amp; Illustration</span>
+            <h1 class="mt-4 text-3xl sm:text-5xl font-semibold text-zinc-900 leading-tight">
+              Une expérience sur mesure, entre flashs coups de cœur et projets personnalisés.
+            </h1>
+            <p class="mt-5 text-lg text-zinc-700/90 max-w-xl">
+              Axl crée des pièces lumineuses, inspirées par la nature, la poésie et les silhouettes félines. Prête à réserver ? Choisis un flash disponible ou écris-nous pour imaginer ensemble ton tatouage.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#flash" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Voir les flashs</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-ink/80 text-ink">Instagram @axllahyene</a>
+              <a href="#booking" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 text-sm font-bold border border-transparent shadow-lg">Réserver maintenant</a>
+            </div>
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+              <div class="frost-card">
+                <p class="text-[11px] uppercase tracking-[0.18em] text-red-500/90 font-semibold">Dispo du moment</p>
+                <p class="mt-1 text-sm text-zinc-700/90">Mai · 2 créneaux flash disponibles — DM rapide recommandé.</p>
+              </div>
+              <div class="frost-card">
+                <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Ambiance</p>
+                <p class="mt-1 text-sm text-zinc-700/90">Studio lumineux, playlist chill, respect de la peau et de tes idées.</p>
+              </div>
+            </div>
+          </div>
+          <div class="relative glass-panel overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,.65),transparent_65%)]" aria-hidden="true"></div>
+            <img src="assets/img/hero-placeholder.svg" alt="Illustration phare — La Hyène" class="relative w-full aspect-[4/5] object-cover rounded-[20px] border border-white/40 shadow-2xl" />
+          </div>
+        </div>
+      </section>
+
+      <section id="links" class="relative bg-white/70 backdrop-blur-sm py-16">
+        <div class="absolute inset-x-0 -top-10 h-24 bg-gradient-to-b from-red-100/30 to-transparent pointer-events-none" aria-hidden="true"></div>
+        <div class="max-w-3xl mx-auto px-4 section-shell">
+          <div class="glass-panel p-6 sm:p-8 text-center">
+            <h2 class="section-title text-3xl font-extrabold tracking-tight justify-center">Liens rapides</h2>
+            <p class="mt-3 text-zinc-600">Accède directement aux informations essentielles du studio.</p>
+            <div class="mt-6 grid gap-3 link-grid">
+              <a href="#booking" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink shadow">Réserver un flash</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Portfolio Instagram</a>
+              <a href="#flash" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Voir la planche actuelle</a>
+              <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Écrire un email</a>
+              <a href="#contact" class="btn inline-flex items-center justify-center rounded-full px-6 py-3 font-bold text-ink">Infos &amp; hygiène</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="flash" class="relative bg-white/60 py-16">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-rose-200/70 to-transparent" aria-hidden="true"></div>
+        <div class="max-w-5xl mx-auto px-4 section-shell">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+            <div>
+              <h2 class="section-title text-3xl font-extrabold tracking-tight">Flashs disponibles</h2>
+              <p class="mt-2 text-zinc-600/90 max-w-xl">Pièces dessinées avec soin. Chaque numéro est unique et tatoué une seule fois.</p>
+            </div>
+            <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Planche du <span id="board-date">JJ/MM/AAAA</span></p>
+          </div>
+          <figure class="flash-figure rounded-2xl border border-white/60 bg-white/80 backdrop-blur">
+            <img src="assets/img/flashboard-placeholder.svg" alt="Planche de flashs disponibles" class="w-full" />
+            <figcaption class="px-4 py-3 text-xs text-zinc-600/90 backdrop-blur-sm bg-white/70">Choisis un numéro et réserve.</figcaption>
+          </figure>
+          <div class="mt-8 grid sm:grid-cols-2 gap-4">
+            <div class="frost-card">
+              <p class="text-[11px] uppercase tracking-[0.18em] text-rose-500 font-semibold">Comment réserver ?</p>
+              <p class="mt-2 text-sm text-zinc-700/90">Envoie un DM avec le numéro du flash, ta disponibilité et une courte présentation.</p>
+              <button id="dmBtn" type="button" class="mt-4 btn bg-ink text-white rounded-full px-4 py-3 font-bold border border-transparent">DM Instagram</button>
+            </div>
+            <div class="frost-card space-y-3">
+              <p class="text-[11px] uppercase tracking-[0.18em] text-sky-500 font-semibold">Préparer ton email</p>
+              <p class="text-sm text-zinc-700/90">Précise le numéro du flash ou ton idée, l’emplacement, la taille et ta disponibilité.</p>
+              <div class="flex flex-wrap gap-2">
+                <button id="mailBtn" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Ouvrir l’email</button>
+                <button id="copyMsg" type="button" class="btn rounded-full px-4 py-3 font-bold text-ink border border-ink/60">Copier le message</button>
+              </div>
+              <p id="copyFeedback" class="text-xs text-emerald-600 font-medium hidden">Message copié !</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="booking" class="relative bg-zinc-50/80 py-16">
+        <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-200/40 to-transparent pointer-events-none" aria-hidden="true"></div>
+        <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-8 section-shell">
+          <div class="glass-panel p-6 sm:p-8">
+            <h3 class="text-2xl font-extrabold mb-3 flex items-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-red-500"></span>Prendre rendez‑vous</h3>
+            <p class="text-zinc-700/90">DM Instagram recommandé pour la réactivité. Email possible avec détails :</p>
+            <ul class="mt-3 text-sm text-zinc-700 list-disc ml-5 space-y-1.5">
+              <li>Numéro du flash ou description de ton projet</li>
+              <li>Zone à tatouer et taille approximative</li>
+              <li>Disponibilités &amp; contraintes éventuelles</li>
+              <li>Prénom, pronoms et toute info utile pour ton confort</li>
+            </ul>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn inline-flex items-center rounded-full px-5 py-3 font-bold text-ink border border-ink/60">DM Instagram</a>
+              <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="btn bg-ink text-white inline-flex items-center rounded-full px-5 py-3 font-bold border border-transparent">Email</a>
+            </div>
+          </div>
+          <div class="glass-panel p-6 sm:p-8">
+            <h3 class="text-2xl font-extrabold mb-3 flex items-center gap-2"><span class="inline-block h-2 w-2 rounded-full bg-sky-500"></span>Localisation</h3>
+            <p class="text-sm text-zinc-700/90">GOLDENLINE — Lyon 6e<br />Quartier Brotteaux / Masséna</p>
+            <div class="mt-4 aspect-[4/3] overflow-hidden rounded-xl border border-white/60 shadow-lg">
+              <iframe title="Plan du studio" src="https://www.openstreetmap.org/export/embed.html?bbox=4.841%2C45.766%2C4.857%2C45.775&amp;layer=mapnik&amp;marker=45.7695%2C4.849"
+                      class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer"></iframe>
+            </div>
+            <p class="mt-3 text-xs text-zinc-500">À 5 minutes du métro Brotteaux — Accueil sur rendez-vous uniquement.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="relative bg-white/70 py-16">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent" aria-hidden="true"></div>
+        <div class="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-8 section-shell">
+          <div class="glass-panel p-6 sm:p-8">
+            <h3 class="text-2xl font-extrabold mb-3">Contact</h3>
+            <ul class="space-y-2 text-zinc-700/90">
+              <li><span class="font-semibold text-zinc-900">Email :</span> <a href="mailto:bonjour@lahyene.art" class="footer-link">bonjour@lahyene.art</a></li>
+              <li><span class="font-semibold text-zinc-900">Instagram :</span> <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="footer-link">@axllahyene</a></li>
+              <li><span class="font-semibold text-zinc-900">Horaires :</span> Sur rendez-vous, mardi → samedi</li>
+            </ul>
+          </div>
+          <div class="glass-panel p-6 sm:p-8">
+            <h3 class="text-2xl font-extrabold mb-3">Infos &amp; hygiène</h3>
+            <ul class="space-y-2 text-zinc-700/90 text-sm">
+              <li>Matériel stérile à usage unique, hygiène irréprochable.</li>
+              <li>Patch test possible pour peaux sensibles (à demander lors de la réservation).</li>
+              <li>Respect des peaux noires et mates : pigments adaptés &amp; conseils cicatrisation.</li>
+              <li>Accessibilité : ascenseur, table ajustable, pauses possibles à tout moment.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/50 bg-white/80 backdrop-blur">
+      <div class="max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 section-shell">
+        <p class="text-sm text-zinc-600">© <span id="year"></span> La Hyène — Axl Mili</p>
+        <div class="text-[12px] text-zinc-500 text-center md:text-right">
+          v1.0 • Mobile-first • Flashboard unique • DM/Email en 1 clic
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const yearSpan = document.getElementById('year');
+      if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+      }
+
+      const boardDateElement = document.getElementById('board-date');
+      if (boardDateElement) {
+        const formatter = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        boardDateElement.textContent = formatter.format(new Date());
+      }
+
+      const dmBtn = document.getElementById('dmBtn');
+      if (dmBtn) {
+        dmBtn.addEventListener('click', () => {
+          window.open('https://www.instagram.com/axllahyene', '_blank', 'noopener');
+        });
+      }
+
+      const mailBtn = document.getElementById('mailBtn');
+      const mailtoLink = document.getElementById('mailtoLink');
+      const mailtoLinkPrimary = document.getElementById('mailtoLinkPrimary');
+      const messageTemplate = `Bonjour La Hyène,\n\nJe souhaiterais réserver un flash. Voici les informations :\n• Numéro du flash ou idée : ___\n• Emplacement : ___\n• Taille approximative : ___\n• Disponibilités : ___\n\nMerci !`;
+
+      const openMail = () => {
+        const subject = encodeURIComponent('Demande de réservation — La Hyène');
+        const body = encodeURIComponent(messageTemplate);
+        window.location.href = `mailto:bonjour@lahyene.art?subject=${subject}&body=${body}`;
+      };
+
+      const attachMailHandler = (element) => {
+        if (!element) return;
+        element.addEventListener('click', (event) => {
+          event.preventDefault();
+          openMail();
+        });
+      };
+
+      attachMailHandler(mailBtn);
+      attachMailHandler(mailtoLink);
+      attachMailHandler(mailtoLinkPrimary);
+
+      const copyBtn = document.getElementById('copyMsg');
+      const feedback = document.getElementById('copyFeedback');
+      if (copyBtn && navigator.clipboard) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(messageTemplate);
+            if (feedback) {
+              feedback.classList.remove('hidden');
+              feedback.classList.remove('text-rose-600');
+              feedback.classList.add('text-emerald-600');
+              feedback.textContent = 'Message copié !';
+              setTimeout(() => feedback.classList.add('hidden'), 2500);
+            }
+          } catch (error) {
+            if (feedback) {
+              feedback.classList.remove('hidden');
+              feedback.classList.remove('text-emerald-600');
+              feedback.classList.add('text-rose-600');
+              feedback.textContent = 'Impossible de copier, sélectionne le texte manuellement.';
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

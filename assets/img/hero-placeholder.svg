@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-labelledby="title desc">
+  <title id="title">Illustration abstraite pour la carte de présentation</title>
+  <desc id="desc">Dégradé rose et bleu avec un motif organique suggérant une silhouette artistique.</desc>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="50%" stop-color="#fb7185" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <linearGradient id="stroke" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#f4f4f5" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="500" rx="36" fill="url(#gradient)" />
+  <path d="M120 80c20-18 45-28 70-27 25 2 47 15 63 33 14 17 23 39 19 61-4 22-20 41-39 53-19 13-42 19-64 25-23 6-46 13-63 29-18 16-29 40-27 64 1 24 16 46 34 61 18 16 40 27 64 31 23 4 48 1 69-10 21-10 38-28 47-49 9-21 10-45 5-67-6-22-18-41-33-57-16-16-34-28-54-36-21-8-42-12-63-19-20-7-41-16-54-33-13-16-17-39-11-59 5-20 19-37 36-50z" fill="#fff8" stroke="url(#stroke)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
