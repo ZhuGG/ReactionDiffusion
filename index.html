@@ -39,8 +39,46 @@
       .shell { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
       .glass { backdrop-filter: blur(18px); background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(244, 244, 245, 0.86)); border: 1px solid rgba(148, 163, 184, 0.28); box-shadow: 0 18px 60px rgba(15, 23, 42, 0.12); }
       .pill { border-radius: 999px; border: 1px solid rgba(15, 23, 42, 0.08); background: linear-gradient(120deg, #fff, #f8fafc); }
-      .btn { transition: transform .16s ease, box-shadow .16s ease; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08); }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .4rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-weight: 700;
+        transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease, color .16s ease, border-color .16s ease;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      }
       .btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(220, 38, 38, 0.16); }
+      .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: color-mix(in srgb, var(--accent) 85%, #000);
+      }
+      .btn-primary:hover {
+        background: color-mix(in srgb, var(--accent) 85%, #000);
+      }
+      .btn-secondary {
+        background: #fff;
+        color: var(--ink);
+        border-color: rgba(15, 23, 42, 0.12);
+      }
+      .btn-secondary:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--ink);
+        border-color: rgba(15, 23, 42, 0.08);
+        box-shadow: none;
+      }
+      .btn-ghost:hover {
+        color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 12%, #fff);
+      }
       .blur-bubble { position: absolute; border-radius: 999px; filter: blur(60px); opacity: .7; pointer-events: none; }
       .grain { position: fixed; inset: 0; pointer-events: none; opacity: .08; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"220\" height=\"220\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"3\" stitchTiles=\"stitch\"/><feColorMatrix type=\"saturate\" values=\"0\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.55\"/></svg>'); mix-blend-mode: soft-light; animation: grainShift 18s steps(8) infinite; z-index: 0; }
       @keyframes grainShift { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(-12%, 6%, 0); } }
@@ -73,9 +111,9 @@
           </span>
         </a>
         <nav class="ml-auto flex items-center gap-2 sm:gap-3">
-          <a href="#flash" class="pill btn px-4 py-2 text-xs sm:text-sm font-semibold text-ink">Planche</a>
-          <a href="#booking" class="pill btn px-4 py-2 text-xs sm:text-sm font-semibold text-ink">Réserver</a>
-          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="pill btn bg-ink text-white px-4 py-2 text-xs sm:text-sm font-semibold">Instagram</a>
+          <a href="#flash" class="btn btn-ghost px-4 py-2 text-xs sm:text-sm">Planche</a>
+          <a href="#booking" class="btn btn-secondary px-4 py-2 text-xs sm:text-sm">Réserver</a>
+          <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn btn-primary px-4 py-2 text-xs sm:text-sm">Instagram</a>
         </nav>
       </div>
     </header>
@@ -91,9 +129,9 @@
             <h1 class="text-4xl sm:text-5xl font-semibold leading-tight">Une page claire pour réserver, découvrir et venir sereinement.</h1>
             <p class="text-lg text-slate-700 max-w-xl">Flashs uniques, accompagnement doux et respectueux de toutes les peaux. Choisis un motif, prépare ton message, ou écris pour imaginer ensemble ta pièce.</p>
             <div class="flex flex-wrap gap-3">
-              <a href="#flash" class="pill btn px-5 py-3 font-bold text-ink">Voir les flashs</a>
-              <a href="#booking" class="pill btn px-5 py-3 font-bold bg-ink text-white">Réserver un créneau</a>
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="pill btn px-5 py-3 font-bold text-ink">Portfolio Instagram</a>
+              <a href="#flash" class="btn btn-secondary px-5 py-3">Voir les flashs</a>
+              <a href="#booking" class="btn btn-primary px-5 py-3">Réserver un créneau</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn btn-ghost px-5 py-3">Portfolio Instagram</a>
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
               <div class="glass rounded-2xl p-4">
@@ -136,10 +174,10 @@
               <p class="tag text-slate-500">Navigation rapide</p>
             </div>
             <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <a href="#booking" class="pill btn px-4 py-3 text-center font-bold text-ink">Réserver un flash</a>
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="pill btn px-4 py-3 text-center font-bold text-ink">Instagram @axllahyene</a>
-              <a href="#flash" class="pill btn px-4 py-3 text-center font-bold text-ink">Voir la planche</a>
-              <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="pill btn px-4 py-3 text-center font-bold text-ink">Écrire un email</a>
+              <a href="#booking" class="btn btn-primary px-4 py-3 text-center">Réserver un flash</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn btn-secondary px-4 py-3 text-center">Instagram @axllahyene</a>
+              <a href="#flash" class="btn btn-ghost px-4 py-3 text-center">Voir la planche</a>
+              <a id="mailtoLinkPrimary" href="mailto:bonjour@lahyene.art" class="btn btn-secondary px-4 py-3 text-center">Écrire un email</a>
             </div>
           </div>
         </div>
@@ -170,9 +208,9 @@
                 <p class="tag text-rose-500">Réserver</p>
                 <p class="mt-2 text-sm text-slate-700">Envoie un DM ou un email avec le numéro du flash, l’emplacement et tes disponibilités.</p>
                 <div class="flex flex-wrap gap-2 mt-4">
-                  <button id="dmBtn" type="button" class="pill btn px-4 py-2 font-bold bg-ink text-white">DM Instagram</button>
-                  <button id="mailBtn" type="button" class="pill btn px-4 py-2 font-bold text-ink">Ouvrir l’email</button>
-                  <button id="copyMsg" type="button" class="pill btn px-4 py-2 font-bold text-ink">Copier le message</button>
+                  <button id="dmBtn" type="button" class="btn btn-primary px-4 py-2">DM Instagram</button>
+                  <button id="mailBtn" type="button" class="btn btn-secondary px-4 py-2">Ouvrir l’email</button>
+                  <button id="copyMsg" type="button" class="btn btn-ghost px-4 py-2">Copier le message</button>
                 </div>
               </div>
               <div class="glass rounded-2xl p-5 space-y-3">
@@ -203,8 +241,8 @@
               <li class="flex gap-3 items-start"><span class="pill px-2 py-1 text-xs font-bold bg-rose-500/10 text-rose-700">3</span>Ajoute tes pronoms, sensibilités ou besoins d’accessibilité.</li>
             </ol>
             <div class="flex flex-wrap gap-3">
-              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="pill btn px-4 py-2 font-bold text-ink">DM Instagram</a>
-              <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="pill btn px-4 py-2 font-bold bg-ink text-white">Envoyer un email</a>
+              <a href="https://www.instagram.com/axllahyene" target="_blank" rel="noopener" class="btn btn-secondary px-4 py-2">DM Instagram</a>
+              <a id="mailtoLink" href="mailto:bonjour@lahyene.art" class="btn btn-primary px-4 py-2">Envoyer un email</a>
             </div>
           </div>
 
@@ -260,13 +298,13 @@
     </main>
 
     <div class="mobile-cta md:hidden fixed inset-x-0 bottom-0 px-4 pb-4 pt-3 bg-gradient-to-t from-white via-white/90 to-transparent backdrop-blur-lg z-20 border-t border-white/80" data-hidden="false">
-      <a href="#booking" class="pill btn w-full text-center font-bold bg-ink text-white" data-cta-mobile>Prendre RDV</a>
+      <a href="#booking" class="btn btn-primary w-full text-center" data-cta-mobile>Prendre RDV</a>
     </div>
 
     <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
 
     <div class="flash-lightbox" id="flashLightbox" role="dialog" aria-modal="true" aria-labelledby="flashLightboxCaption" tabindex="-1">
-      <button type="button" class="pill btn flash-lightbox__close bg-ink text-white" id="flashLightboxClose">Fermer</button>
+      <button type="button" class="btn btn-primary flash-lightbox__close" id="flashLightboxClose">Fermer</button>
       <figure class="relative max-w-full text-white text-sm text-center space-y-3">
         <img src="" alt="" id="flashLightboxImg" class="flash-lightbox__img" decoding="async" loading="lazy" />
         <figcaption id="flashLightboxCaption" class="opacity-85"></figcaption>
